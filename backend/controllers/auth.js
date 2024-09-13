@@ -2,6 +2,7 @@ import { User } from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { GenerateTokenandSetCookie } from "../Utils/GenerateTokenandSetCookie.js";
 import { body, validationResult } from 'express-validator';
+import { SendVerificationEmail } from "../Email/SendVerificationEmail.js";
 
 export const signup = [
 
@@ -40,6 +41,7 @@ export const signup = [
             await user.save();
 
             GenerateTokenandSetCookie(res, user._id);
+            SendVerificationEmail(user.name,user.email, verificationToken);
 
             res.status(201).json({
                 success: true,
