@@ -175,3 +175,15 @@ export const resetpassword = async (req,res) =>{
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 }
+
+export const checkAuth = async (req,res) =>{
+    try {
+        const user = await User.findById(req.userID);
+        if (!user) {
+            res.status(400).json({ success: false, message: 'User not found' });
+        }
+        res.status(200).json({ success: true, user: { ...user._doc, password: undefined } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+}
