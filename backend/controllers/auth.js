@@ -41,7 +41,7 @@ export const signup = [
             await user.save();
 
             GenerateTokenandSetCookie(res, user._id);
-            SendVerificationEmail(user.name,user.email, verificationToken);
+            SendVerificationEmail(user.name, user.email, verificationToken);
 
             res.status(201).json({
                 success: true,
@@ -52,14 +52,15 @@ export const signup = [
         } catch (error) {
             res.status(500).json({ success: false, message: 'Server error', error: error.message });
         }
-    }]
+    }
+]
 
 
 export const verifyemail = async (req, res) => {
 
-    const { email, verificationToken } = req.body;
+    const { verificationToken } = req.body;
     try {
-        const user = await User.findOne({ email, verificationToken, verificationTokenExpiresAt: { $gt: Date.now() } });
+        const user = await User.findOne({ verificationToken, verificationTokenExpiresAt: { $gt: Date.now() } });
         if (!user) {
             return res.status(400).json({ success: false, message: 'Invalid or expired verification token' });
         }
@@ -67,11 +68,11 @@ export const verifyemail = async (req, res) => {
         user.verificationToken = undefined;
         user.verificationTokenExpiresAt = undefined;
         await user.save();
-        res.status(200).json({ 
-            success: true, 
+        res.status(200).json({
+            success: true,
             message: 'Email verified successfully',
             user: { ...user._doc, password: undefined }
-         });
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
@@ -84,5 +85,6 @@ export const login = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
-    res.send('Logout');
+    res.clearCookie('token');
+    res.status(200).json({ success: true, message: 'Logged out successfully' });
 }
