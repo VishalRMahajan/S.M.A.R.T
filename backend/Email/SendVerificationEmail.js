@@ -23,8 +23,9 @@ export const SendVerificationEmail = async (name, email, verificationToken) => {
     }
 };
 
-
+/*
 const email = "vism06@gmail.com";
-const verificationToken = "123456"; // This should be dynamically generated
+const verificationToken = "123456"; 
 const name = "Vishal"
 SendVerificationEmail(name,email, verificationToken);
+*/
