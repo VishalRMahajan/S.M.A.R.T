@@ -53,7 +53,7 @@ const SignUP = () => {
         </button>
       </form>
       <div className='px-8 py-4  bg-opacity-50 flex justify-center'>
-        <p className='text-sm text-gray-400'>
+        <p className='text-mb text-black'>
           Already have an account?{" "}
           <Link to={"/login"} className='text-purple-500 hover:underline'>
             Login
