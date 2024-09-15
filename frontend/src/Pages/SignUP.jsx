@@ -2,17 +2,30 @@ import { React, useState } from 'react'
 import FormBackground from "../components/FormBackground";
 import Input from '../components/Input';
 import { User, Mail, Lock } from "lucide-react"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import { useAuthStore } from '../store/authStore';
+import toast from 'react-hot-toast';
 
 const SignUP = () => {
 
   const [name, SetName] = useState("");
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handelsSignUp = (e) => {
-    e.preventDefault()
+  const { signup, error } = useAuthStore();
+
+  const handelSignUp = async (e) => {
+    e.preventDefault();
+
+    try {
+      await signup(email, password, name);
+      navigate("/verifyemail");
+      toast.success("🎉 Account created Successfully. Please verify your email address.");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -23,7 +36,7 @@ const SignUP = () => {
         Register as Evaluator
       </h2>
 
-      <form onSubmit={handelsSignUp}>
+      <form onSubmit={handelSignUp}>
         <Input
           icon={User}
           type='text'
@@ -45,6 +58,9 @@ const SignUP = () => {
           value={password}
           onChange={(e) => SetPassword(e.target.value)}
         />
+        {error && <div class="mb-5  flex text-center justify-center  text-sm rounded-lg text-red-400" >
+          <span class="font-medium">{error} </span>
+        </div>}
 
         <PasswordStrengthMeter password={password} />
 

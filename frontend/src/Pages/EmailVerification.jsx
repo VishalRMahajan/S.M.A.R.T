@@ -1,11 +1,15 @@
 import { React, useRef, useState, useEffect } from 'react'
 import FormBackground from '../components/FormBackground'
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
+import { toast } from 'react-hot-toast';
 
 const EmailVerification = () => {
     const [code, setCode] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([]);
     const navigate = useNavigate();
+
+    const { verifyemail, error } = useAuthStore();
 
     const handleChange = (index, value) => {
 
@@ -18,7 +22,7 @@ const EmailVerification = () => {
         if (newCode.join("").length >= 6 && value) {
             return;
         }
-        
+
         if (value.length > 1) {
             const pastedCode = value.slice(0, 6).split("");
             for (let i = 0; i < 6; i++) {
@@ -26,16 +30,16 @@ const EmailVerification = () => {
             }
             setCode(newCode);
 
-           
+
             const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
             const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
             inputRefs.current[focusIndex].focus();
-            
+
         } else {
             newCode[index] = value;
             setCode(newCode);
 
-            
+
             if (value && index < 5) {
                 inputRefs.current[index + 1].focus();
             }
@@ -51,6 +55,13 @@ const EmailVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const verificationCode = code.join("");
+        try {
+            await verifyemail(verificationCode);
+            navigate("/");
+            toast.success("Email verified successfully");
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
@@ -87,6 +98,9 @@ const EmailVerification = () => {
                     ))}
                 </div>
 
+                {error && <div class="mb-5  flex text-center justify-center  text-sm rounded-lg text-red-400" >
+                    <span class="font-medium">{error} </span>
+                </div>}
 
                 <button className='w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg'>
                     Submit

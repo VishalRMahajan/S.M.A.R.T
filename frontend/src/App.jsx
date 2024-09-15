@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './Pages/Login';
 import SignUP from './Pages/SignUP';
 import EmailVerification from './Pages/EmailVerification';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
           <Route path="/" element={"Home"} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUP />} />
-          <Route path="/email-verification" element={<EmailVerification />} />
+          <Route path="/verifyemail" element={<EmailVerification />} />
         </Routes>
+        <Toaster position="top-right" reverseOrder={false}/>
       </div>
 
       {/* Message visible only on mobile (small screens) */}

@@ -23,13 +23,15 @@ export const signup = [
             return res.status(400).json({ success: false, errors: errors.array() });
         }
 
+        
         const { name, email, password } = req.body;
 
+        
         try {
 
             const userAlreadyExists = await User.findOne({ email });
             if (userAlreadyExists) {
-                throw new Error('User already exists');
+                return res.status(400).json({ success: false, message: 'User already exists' });
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,7 +48,7 @@ export const signup = [
             await user.save();
 
             GenerateTokenandSetCookie(res, user._id);
-            await SendVerificationEmail(user.name, user.email, verificationToken);
+            SendVerificationEmail(user.name, user.email, verificationToken);
 
             res.status(201).json({
                 success: true,
@@ -55,7 +57,7 @@ export const signup = [
             });
 
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Server error', error: error.message });
+            res.status(500).json({ success: false, message: error.message });
         }
     }
 ]
@@ -67,7 +69,7 @@ export const verifyemail = async (req, res) => {
     try {
         const user = await User.findOne({ verificationToken, verificationTokenExpiresAt: { $gt: Date.now() } });
         if (!user) {
-            return res.status(400).json({ success: false, message: 'Invalid or expired verification token' });
+            return res.status(400).json({ success: false, message: 'Invalid or OTP Expired' });
         }
         user.isVerified = true;
         user.verificationToken = undefined;
@@ -79,7 +81,7 @@ export const verifyemail = async (req, res) => {
             user: { ...user._doc, password: undefined }
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 
 
@@ -110,7 +112,7 @@ export const login = async (req, res) => {
             user: { ...user._doc, password: undefined }
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 
 }
@@ -146,7 +148,7 @@ export const forgotpassword = async (req,res) =>{
         
 
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
@@ -172,7 +174,7 @@ export const resetpassword = async (req,res) =>{
         res.status(200).json({ success: true, message: 'Password reset successfully' });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
