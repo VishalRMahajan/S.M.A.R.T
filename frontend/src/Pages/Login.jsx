@@ -38,7 +38,7 @@ const Login = () => {
                 />
 
                 <div className='flex items-center mb-4'>
-                    <Link to={"/forgot-password"} className='text-purple-500 hover:underline'>
+                    <Link to={"/forgot-password"} className='bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text hover:underline'>
                         Forgot Password?
                     </Link>
                 </div>
