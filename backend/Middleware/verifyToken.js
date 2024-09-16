@@ -8,7 +8,7 @@ export const verifyToken = (req, res, next) => {
 
         if(!decoded) return res.status(401).json({success: false, message: 'Unauthorized - token to access the resource is invalid'});
 
-        req.userID = decoded.userId;
+        req.userId = decoded.userId;
         next();
     } catch (error) {
         return res.status(500).json({success: false, message: 'Server error', error: error.message});

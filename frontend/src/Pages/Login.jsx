@@ -1,16 +1,28 @@
 import { React, useState } from 'react'
 import FormBackground from "../components/FormBackground";
 import Input from '../components/Input';
-import {  Mail, Lock } from "lucide-react"
-import { Link } from 'react-router-dom';
+import { Mail, Lock } from "lucide-react"
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
+import toast from 'react-hot-toast';
 
 
 const Login = () => {
     const [email, SetEmail] = useState("");
     const [password, SetPassword] = useState("");
+    const navigate = useNavigate();
 
-    const handelsSignUp = (e) => {
+    const { login, error } = useAuthStore();
+
+    const handleLogin = async (e) => {
         e.preventDefault()
+        try {
+            await login(email, password);
+            navigate("/");
+            toast.success("Login Successful")
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -21,7 +33,7 @@ const Login = () => {
                 Login as Evaluator
             </h2>
 
-            <form onSubmit={handelsSignUp}>
+            <form onSubmit={handleLogin}>
                 <Input
                     icon={Mail}
                     type='email'
@@ -42,7 +54,9 @@ const Login = () => {
                         Forgot Password?
                     </Link>
                 </div>
-
+                {error && <div class="mb-5  flex text-center justify-center  text-sm rounded-lg text-red-400" >
+                    <span class="font-medium">{error} </span>
+                </div>}
                 <button className='w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg'>
                     Login
                 </button>

@@ -94,17 +94,19 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             res.status(400).json({ success: false, message: 'User is not registered' });
+            return;
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             res.status(400).json({ success: false, message: 'Invalid password' });
+            return;
         }
 
         GenerateTokenandSetCookie(res, user._id);
         
         user.lastLogin = new Date();
-        await user.save();
+        user.save();
 
         res.status(200).json({
             success: true,
@@ -141,7 +143,7 @@ export const forgotpassword = async (req,res) =>{
 
         await user.save();
 
-        await SendForgotPasswordEmail(user.name, user.email, `${process.env.CLIENT_URL}/resetpassword/${resetToken}`);
+        SendForgotPasswordEmail(user.name, user.email, `${process.env.CLIENT_URL}/resetpassword/${resetToken}`);
 
         res.status(200).json({ success: true, message: 'Password reset email sent successfully' });
 
@@ -169,7 +171,7 @@ export const resetpassword = async (req,res) =>{
 
         await user.save();
 
-        await SendResetSuccessEmail(user.name, user.email);
+        SendResetSuccessEmail(user.name, user.email);
 
         res.status(200).json({ success: true, message: 'Password reset successfully' });
 
@@ -180,7 +182,7 @@ export const resetpassword = async (req,res) =>{
 
 export const checkAuth = async (req,res) =>{
     try {
-        const user = await User.findById(req.userID);
+        const user = await User.findById(req.userId);
         if (!user) {
             res.status(400).json({ success: false, message: 'User not found' });
         }
