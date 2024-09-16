@@ -1,13 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { useAuthStore } from './store/authStore';
+import { useEffect } from 'react';
+
+
 import Login from './Pages/Login';
 import SignUP from './Pages/SignUP';
 import EmailVerification from './Pages/EmailVerification';
 import ForgotPassword from './Pages/ForgotPassword';
-import { Toaster } from 'react-hot-toast';
-import { useAuthStore } from './store/authStore';
-import { useEffect } from 'react';
 import Dashboard from './Pages/Dashboard';
 import ResetPassword from './Pages/ResetPassword';
+import AdminDashboard from './Pages/AdminDashboard';
 
 const ProtectedRoute = ({children}) =>{
   const {isAuthenticated,user} = useAuthStore();
@@ -20,13 +23,38 @@ const ProtectedRoute = ({children}) =>{
     return <Navigate to="/verifyemail" replace />
   }
 
+  if(user.role === "admin"){
+    return <Navigate to="/adminDashboard" replace/>
+  }
+
   return children;
 }
 
 const RedirectAuthenticatedUser= ({children}) =>{
   const {isAuthenticated,user} = useAuthStore();
   
-  if (isAuthenticated && user.isVerified){
+  if (isAuthenticated && user.isVerified && user.role === "evaluator"){
+    return <Navigate to="/" replace/>
+  }
+  else if (isAuthenticated && user.isVerified && user.role === "admin"){
+    return <Navigate to="/adminDashboard" replace/>
+  }
+
+  return children;
+}
+
+const ProtectedAdminRoute = ({children}) =>{
+  const {isAuthenticated,user} = useAuthStore();
+  
+  if (!isAuthenticated){
+    return <Navigate to="/login" replace/>
+  }
+
+  if(!user.isVerified){
+    return <Navigate to="/verifyemail" replace />
+  }
+
+  if(user.role !== "admin"){
     return <Navigate to="/" replace/>
   }
 
@@ -51,6 +79,7 @@ function App() {
           <Route path="/verifyemail" element={<EmailVerification />} />
           <Route path="/forgot-password" element={<RedirectAuthenticatedUser><ForgotPassword/></RedirectAuthenticatedUser>}/>
           <Route path="/resetpassword/:token" element={<RedirectAuthenticatedUser><ResetPassword/></RedirectAuthenticatedUser>}/>
+          <Route path="/adminDashboard" element={<ProtectedAdminRoute><AdminDashboard/></ProtectedAdminRoute>}/>
         </Routes>
         <Toaster position="top-right" reverseOrder={false}/>
       </div>

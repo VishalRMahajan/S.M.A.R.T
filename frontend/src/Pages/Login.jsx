@@ -30,7 +30,7 @@ const Login = () => {
             <h2
                 className='text-3xl font-bold mb-6 text-center  bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text'
             >
-                Login as Evaluator
+                Login
             </h2>
 
             <form onSubmit={handleLogin}>

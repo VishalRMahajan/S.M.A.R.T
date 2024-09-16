@@ -2,6 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 
+
 const API_URL = "http://localhost:5000/api/auth";
 
 axios.defaults.withCredentials = true;
@@ -11,6 +12,7 @@ export const useAuthStore = create((set) => ({
     isAuthenticated: false,
     error: null,
     isCheckingAuth: true,
+    role: "evaluator",
 
     signup: async (email, password, name) => {
         set({ error: null })
@@ -86,6 +88,17 @@ export const useAuthStore = create((set) => ({
             throw error;
         }
     },
+
+    checkRole: async () => {
+        set({ error: null })
+        try {
+            const response = await axios.post(`${API_URL}/check-role`);
+            set({ role: response.data.role });
+        } catch (error) {
+            set({ error: error.response.data.message || "Error checking role" });
+            throw error;
+        }
+    }
 
 
 }))

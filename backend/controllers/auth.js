@@ -1,4 +1,4 @@
-import { User } from "../models/user.js";
+import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
@@ -191,3 +191,16 @@ export const checkAuth = async (req,res) =>{
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 }
+
+export const checkRole = async (req,res) =>{
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            res.status(400).json({ success: false, message: 'User not found' });
+        }
+        res.status(200).json({ success: true, user: { role:user.role, password: undefined } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+}
+
