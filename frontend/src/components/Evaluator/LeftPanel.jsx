@@ -2,26 +2,21 @@ import React from "react";
 import { Check, Slash, Trash2, Type, X } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Ensure you import navigate
 import MarkButton from "./MarkButton";
-
-const IconButton = ({ icon: Icon, label, color }) => (
-  <button
-    className="bg-gray-100 text-black rounded-full w-10 h-10 flex items-center justify-center border-2 border-purple-200"
-    aria-label={label}
-  >
-    <Icon className={`text-${color}-500`} />
-  </button>
-);
+import IconButton from "./IconButton";
+import { useEvaluatorStore } from "../../store/evaluatorStore";
 
 const LeftPanel = () => {
   const navigate = useNavigate(); // Initialize navigate
+  const { examType } = useEvaluatorStore();
 
   return (
     <div className="flex flex-col  items-center">
       <p className="text-black font-bold">Drag Marks</p>
-      <div className=" rounded-lg p-4">
-        <div className="flex flex-row space-x-6 ">
+
+      <div className="rounded-lg p-4">
+        <div className="flex flex-row space-x-6">
           <MarkButton label="0" />
-          <MarkButton label="1/2" />
+          <MarkButton label="0.5" />
         </div>
         <div className="flex flex-row space-x-6 mt-2">
           <MarkButton label="1" />
@@ -33,16 +28,20 @@ const LeftPanel = () => {
         </div>
         <div className="flex flex-row space-x-6 mt-2">
           <MarkButton label="5" />
-          <MarkButton label="6" />
+          {examType !== "MSE" && <MarkButton label="6" />}
         </div>
-        <div className="flex flex-row space-x-6 mt-2">
-          <MarkButton label="7" />
-          <MarkButton label="8" />
-        </div>
-        <div className="flex flex-row space-x-6 mt-2">
-          <MarkButton label="9" />
-          <MarkButton label="10" />
-        </div>
+        {examType !== "MSE" && (
+          <>
+            <div className="flex flex-row space-x-6 mt-2">
+              <MarkButton label="7" />
+              <MarkButton label="8" />
+            </div>
+            <div className="flex flex-row space-x-6 mt-2">
+              <MarkButton label="9" />
+              <MarkButton label="10" />
+            </div>
+          </>
+        )}
         <hr className="my-3 border-gray-500 w-full border-1 rounded-full" />
         <div className="flex flex-row space-x-6 mt-1">
           <IconButton icon={Check} label="Check" color="green" />

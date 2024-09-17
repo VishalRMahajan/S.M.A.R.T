@@ -28,7 +28,7 @@ const EvaluationDashboard = () => {
       {/* Main layout with left panel, content, and right panel */}
       <div className="flex flex-grow">
         {/* Left panel */}
-        <aside className="w-1/7 bg-white rounded-3xl m-2 text-white p-4 shadow ">
+        <aside className="w-44 bg-white rounded-3xl m-2 text-white p-4 shadow ">
           <LeftPanel />
         </aside>
 
