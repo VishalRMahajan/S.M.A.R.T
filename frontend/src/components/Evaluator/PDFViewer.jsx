@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as pdfjs from "pdfjs-dist";
 import { Minus, Plus } from "lucide-react";
+import { useEvaluatorStore } from "../../store/evaluatorStore";
 
 // Use the correct worker
 pdfjs.GlobalWorkerOptions.workerSrc =
@@ -38,6 +39,31 @@ const PDFViewer = ({ pdfFile }) => {
     loadPDF();
   }, [pdfFile, pageNumber]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    const handleDrop = (e) => {
+      e.preventDefault();
+      const droppedMark = e.dataTransfer.getData("text/plain");
+      const x = e.clientX - canvas.getBoundingClientRect().left;
+      const y = e.clientY - canvas.getBoundingClientRect().top;
+      console.log(`Dropped mark: ${droppedMark} at position: (${x}, ${y})`);
+      // You can use these coordinates to mark the PDF or perform further actions
+    };
+
+    const handleDragOver = (e) => {
+      e.preventDefault(); // Allow the drop
+    };
+
+    canvas.addEventListener("dragover", handleDragOver);
+    canvas.addEventListener("drop", handleDrop);
+
+    return () => {
+      canvas.removeEventListener("dragover", handleDragOver);
+      canvas.removeEventListener("drop", handleDrop);
+    };
+  }, []);
+
   const goToNextPage = () => {
     if (pageNumber < numPages) setPageNumber(pageNumber + 1);
   };
@@ -46,6 +72,7 @@ const PDFViewer = ({ pdfFile }) => {
     if (pageNumber > 1) setPageNumber(pageNumber - 1);
   };
 
+  const { selectedQuestion } =  useEvaluatorStore();
   return (
     <div className="flex pdf-viewer flex-col items-center justify-center">
       <div className="controls flex justify-center items-center mt-4 space-x-4">
@@ -57,7 +84,7 @@ const PDFViewer = ({ pdfFile }) => {
           <Minus className=""/>
         </button>
         <span className="text-black">
-          Page {pageNumber} of {numPages}
+          {pageNumber} / {numPages}
         </span>
         <button
           onClick={goToNextPage}
@@ -66,6 +93,7 @@ const PDFViewer = ({ pdfFile }) => {
         >
           <Plus className=""/>
         </button>
+        <p className="text-black font-bold"> You are currently evaluating : {selectedQuestion}</p>
       </div>
       <canvas ref={canvasRef}></canvas>
     </div>

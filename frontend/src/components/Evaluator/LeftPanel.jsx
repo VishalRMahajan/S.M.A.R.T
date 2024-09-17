@@ -1,12 +1,7 @@
 import React from "react";
 import { Check, Slash, Trash2, Type, X } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Ensure you import navigate
-
-const MarkButton = ({ label }) => (
-  <button className="bg-gray-100 text-black rounded-full w-10 h-10 flex items-center justify-center border-2 border-purple-200">
-    {label}
-  </button>
-);
+import MarkButton from "./MarkButton";
 
 const IconButton = ({ icon: Icon, label, color }) => (
   <button
@@ -21,10 +16,10 @@ const LeftPanel = () => {
   const navigate = useNavigate(); // Initialize navigate
 
   return (
-    <div>
-      <div className="flex flex-col rounded-lg p-4 items-center">
-        <p className="text-black font-bold">Drag Marks</p>
-        <div className="flex flex-row space-x-6 mt-2">
+    <div className="flex flex-col  items-center">
+      <p className="text-black font-bold">Drag Marks</p>
+      <div className=" rounded-lg p-4">
+        <div className="flex flex-row space-x-6 ">
           <MarkButton label="0" />
           <MarkButton label="1/2" />
         </div>
