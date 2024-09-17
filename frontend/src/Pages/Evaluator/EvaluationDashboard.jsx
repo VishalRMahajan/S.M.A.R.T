@@ -1,9 +1,9 @@
 import React from 'react'
-import EvaluationDashboardLayout from '../../components/Evaluator/EvaluationDashboardLayout'
 import LeftPanel from '../../components/Evaluator/LeftPanel'
 import RightPanel from '../../components/Evaluator/RightPanel'
 import { useNavigate } from 'react-router-dom'
-import CenterPanel from '../../components/Evaluator/CentralPanel'
+import PDFViewer from '../../components/Evaluator/PDFViewer'
+
 
 
 const EvaluationDashboard = () => {
@@ -34,10 +34,11 @@ const EvaluationDashboard = () => {
 
         {/* Main content area */}
         <main className="flex-grow bg-white  rounded-3xl m-2 text-white p-4 shadow ">
+          <PDFViewer pdfFile="../../../public/sample.pdf" />
         </main>
 
         {/* Right panel */}
-        <aside className="w-1/5 bg-white bg-opacity-50 backdrop-blur-lg rounded-3xl m-2 text-white p-4  shadow">
+        <aside className="w-1/5 bg-white backdrop-blur-lg rounded-3xl m-2 text-white p-4  shadow">
           <RightPanel />
         </aside>
       </div>
