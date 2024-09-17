@@ -4,13 +4,14 @@ import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
 
 
-import Login from './Pages/Login';
-import SignUP from './Pages/SignUP';
-import EmailVerification from './Pages/EmailVerification';
-import ForgotPassword from './Pages/ForgotPassword';
+import Login from './Pages/Auth/Login';
+import SignUP from './Pages/Auth/SignUP';
+import EmailVerification from './Pages/Auth/EmailVerification';
+import ForgotPassword from './Pages/Auth/ForgotPassword';
 import Dashboard from './Pages/Dashboard';
-import ResetPassword from './Pages/ResetPassword';
+import ResetPassword from './Pages/Auth/ResetPassword';
 import AdminDashboard from './Pages/AdminDashboard';
+import EvaluationDashboard from './Pages/Evaluator/EvaluationDashboard';
 
 const ProtectedRoute = ({children}) =>{
   const {isAuthenticated,user} = useAuthStore();
@@ -73,12 +74,21 @@ function App() {
       {/* Content visible only on desktop (medium screens and larger) */}
       <div className="hidden md:block">
         <Routes>
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          
+
+          //Auth Routes
           <Route path="/login" element={<RedirectAuthenticatedUser><Login /></RedirectAuthenticatedUser>}/>
           <Route path="/signup" element={<RedirectAuthenticatedUser><SignUP /></RedirectAuthenticatedUser>} />
           <Route path="/verifyemail" element={<EmailVerification />} />
           <Route path="/forgot-password" element={<RedirectAuthenticatedUser><ForgotPassword/></RedirectAuthenticatedUser>}/>
           <Route path="/resetpassword/:token" element={<RedirectAuthenticatedUser><ResetPassword/></RedirectAuthenticatedUser>}/>
+          
+
+          //Evaluator Routes
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/evaluationDashboard" element={<EvaluationDashboard/>}/>
+
+          //Admin Routes
           <Route path="/adminDashboard" element={<ProtectedAdminRoute><AdminDashboard/></ProtectedAdminRoute>}/>
         </Routes>
         <Toaster position="top-right" reverseOrder={false}/>

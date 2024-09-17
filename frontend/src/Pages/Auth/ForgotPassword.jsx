@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import FormBackground from '../components/FormBackground'
-import { useAuthStore } from '../store/authStore';
-import Input from '../components/Input';
+import FormBackground from '../../components/FormBackground'
+import { useAuthStore } from '../../store/authStore';
+import Input from '../../components/Input';
 import { ArrowLeft, Mail } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

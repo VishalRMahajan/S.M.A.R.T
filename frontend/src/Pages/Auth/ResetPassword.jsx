@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import FormBackground from '../components/FormBackground'
+import FormBackground from '../../components/FormBackground'
 import { Lock } from 'lucide-react';
-import Input from '../components/Input';
+import Input from '../../components/Input';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
 
 const ResetPassword = () => {

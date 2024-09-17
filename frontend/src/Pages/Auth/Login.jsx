@@ -1,9 +1,9 @@
 import { React, useState } from 'react'
-import FormBackground from "../components/FormBackground";
-import Input from '../components/Input';
+import FormBackground from "../../components/FormBackground";
+import Input from '../../components/Input';
 import { Mail, Lock } from "lucide-react"
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
 
 

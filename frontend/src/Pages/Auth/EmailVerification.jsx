@@ -1,7 +1,7 @@
 import { React, useRef, useState, useEffect } from 'react'
-import FormBackground from '../components/FormBackground'
+import FormBackground from '../../components/FormBackground'
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { toast } from 'react-hot-toast';
 
 const EmailVerification = () => {
