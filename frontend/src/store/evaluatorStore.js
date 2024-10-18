@@ -7,6 +7,7 @@ export const useEvaluatorStore = create(
     selectedQuestion: "Q1a",
     selectedButton: "Q1a",
     examType: "MSE",
+    
 
     questions: {
       Q1a: { marks: 0, maxMarks: 5 },

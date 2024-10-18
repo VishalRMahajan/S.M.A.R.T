@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import SelectQuestionButton from "./SelectQuestionButton";
 import MarksTable from "./MarksTable";
 import { useEvaluatorStore } from "../../store/evaluatorStore";
+import { useNavigate } from "react-router-dom";
 
 const RightPanel = () => {
-  const { examType, setExamType ,selectedQuestion} = useEvaluatorStore();
+  const { examType, setExamType, selectedQuestion } = useEvaluatorStore();
+  const navigate = useNavigate();
 
   const handleExamTypeChange = (event) => {
     setExamType(event.target.value);
@@ -53,7 +55,22 @@ const RightPanel = () => {
           </div>
         )}
       </div>
+
       <MarksTable />
+      <div className="flex flex-row space-x-4 items-center justify-center">
+        <button
+          className="p-2 w-36 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg mt-5"
+          onClick={() => navigate("/")}
+        >
+          Finish Evaluation
+        </button>
+        <button
+          className="p-2 w-36 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg mt-5"
+          onClick={() => navigate("/")}
+        >
+          Next Sheet
+        </button>
+      </div>
     </div>
   );
 };

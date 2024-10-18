@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as pdfjs from "pdfjs-dist";
 import { Minus, Plus } from "lucide-react";
 import { useEvaluatorStore } from "../../store/evaluatorStore";
+import QuestionPaper from "./QuestionPaper";
 
 // Use the correct worker
 pdfjs.GlobalWorkerOptions.workerSrc =
@@ -12,6 +13,16 @@ const PDFViewer = ({ pdfFile }) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const { selectedQuestion, updateMarks } = useEvaluatorStore();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
 
   useEffect(() => {
@@ -111,9 +122,12 @@ const PDFViewer = ({ pdfFile }) => {
         >
           <Plus className="" />
         </button>
-        
+        <button onClick={openModal} className="p-2 bg-purple-500 text-white rounded-md" >
+          View Question Paper
+        </button>
       </div>
       <canvas ref={canvasRef}></canvas>
+      <QuestionPaper isOpen={isModalOpen} onRequestClose={closeModal} />
     </div>
   );
 };

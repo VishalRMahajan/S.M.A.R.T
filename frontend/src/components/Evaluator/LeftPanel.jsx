@@ -5,12 +5,13 @@ import MarkButton from "./MarkButton";
 import IconButton from "./IconButton";
 import { useEvaluatorStore } from "../../store/evaluatorStore";
 
+
 const LeftPanel = () => {
   const navigate = useNavigate(); // Initialize navigate
   const { examType } = useEvaluatorStore();
 
   return (
-    <div className="flex flex-col  items-center">
+    <div className="flex flex-col items-center">
       <p className="text-black font-bold">Drag Marks</p>
 
       <div className="rounded-lg p-4">
@@ -54,12 +55,7 @@ const LeftPanel = () => {
         <div className="flex flex-row space-x-6 mt-2">
           <IconButton icon={Trash2} label="Trash" color="blue" />
         </div>
-        <button
-          className="p-2 min-w-max bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg mt-5"
-          onClick={() => navigate("/")}
-        >
-          Next Sheet
-        </button>
+        
       </div>
     </div>
   );

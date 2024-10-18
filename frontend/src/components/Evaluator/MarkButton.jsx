@@ -6,7 +6,7 @@ const MarkButton = ({ label }) => {
 
   return (
     <button
-      className="bg-gray-100 text-black rounded-full w-10 h-10 flex items-center justify-center border-2 border-purple-200"
+      className="bg-gray-100 text-black rounded-full w-10 h-10 flex items-center justify-center border"
       draggable="true"
       onDragStart={handleDragStart}
     >
