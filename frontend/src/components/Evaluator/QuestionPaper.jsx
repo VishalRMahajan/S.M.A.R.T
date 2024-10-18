@@ -24,7 +24,7 @@ const QuestionPaper = ({ isOpen, onRequestClose }) => {
       }}
     >
       <div style={{ height: "100%" }}>
-        <button onClick={onRequestClose} className="p-2 bg-purple-500 text-white rounded-3xl mb-2" style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <button onClick={onRequestClose} className="p-2 bg-blue-700 text-white rounded-3xl mb-2" style={{ position: "absolute", top: "10px", right: "10px" }}>
           <X />
         </button>
         <iframe

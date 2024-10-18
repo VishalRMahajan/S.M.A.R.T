@@ -15,16 +15,16 @@ const SelectQuestionButton = ({ label }) => {
       <p className="text-lg text-black font-bold">{label}</p>
       <button
         className={`${
-          selectedButton === `${label}a` ? "bg-purple-500 text-white" : "bg-gray-100 text-black"
-        } rounded-full w-10 h-10 flex items-center justify-center border-2 border-purple-200`}
+          selectedButton === `${label}a` ? "bg-blue-700 text-white" : "bg-gray-100 text-black"
+        } rounded-full w-10 h-10 flex items-center justify-center border-2 border-blue-200`}
         onClick={() => handleClick(`${label}a`)}
       >
         a
       </button>
       <button
         className={`${
-          selectedButton === `${label}b` ? "bg-purple-500 text-white" : "bg-gray-100 text-black"
-        } rounded-full w-10 h-10 flex items-center justify-center border-2 border-purple-200`}
+          selectedButton === `${label}b` ? "bg-blue-700 text-white" : "bg-gray-100 text-black"
+        } rounded-full w-10 h-10 flex items-center justify-center border-2 border-blue-200`}
         onClick={() => handleClick(`${label}b`)}
       >
         b

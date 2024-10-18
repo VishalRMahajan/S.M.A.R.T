@@ -108,7 +108,7 @@ const PDFViewer = ({ pdfFile }) => {
         <button
           onClick={goToPrevPage}
           disabled={pageNumber <= 1}
-          className="p-2 bg-purple-500 text-white rounded-md"
+          className="p-2 bg-blue-700 text-white rounded-md"
         >
           <Minus className="" />
         </button>
@@ -118,11 +118,11 @@ const PDFViewer = ({ pdfFile }) => {
         <button
           onClick={goToNextPage}
           disabled={pageNumber >= numPages}
-          className="p-2 bg-purple-500 text-white rounded-md"
+          className="p-2 bg-blue-700 text-white rounded-md"
         >
           <Plus className="" />
         </button>
-        <button onClick={openModal} className="p-2 bg-purple-500 text-white rounded-md" >
+        <button onClick={openModal} className="p-2 bg-blue-700 text-white rounded-md" >
           View Question Paper
         </button>
       </div>

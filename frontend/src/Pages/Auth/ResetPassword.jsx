@@ -35,7 +35,7 @@ const ResetPassword = () => {
   }
   return (
     <div className="flex min-h-screen">
-      <div className="flex justify-center items-center w-1/2 bg-gradient-to-l from-purple-500 to-purple-900 p-10">
+      <div className="flex justify-center items-center w-1/2 bg-gradient-to-l from-blue-700 to-blue-900 p-10">
         <div className="flex flex-col justify-center items-center bg-white bg-opacity-25 backdrop-blur-lg rounded-3xl p-6 shadow-lg">
           <img src="../../public/SFITLogo.png" alt="Logo" className="h-56 mt-14" />
           <img src="../../public/SmartLogo.png" alt="Logo" className="mb-14 mr-14 ml-14" />
@@ -43,9 +43,9 @@ const ResetPassword = () => {
       </div>
 
       <div className="flex justify-center items-center w-1/2 bg-white p-10">
-        <div className="w-full max-w-md mt-6 bg-purple-500 bg-opacity-25 backdrop-blur-lg rounded-3xl p-6 shadow-lg">
+        <div className="w-full max-w-md mt-6 bg-blue-700 bg-opacity-25 backdrop-blur-lg rounded-3xl p-6 shadow-lg">
           <h2
-            className='text-3xl font-bold mb-6 text-center  bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text'
+            className='text-3xl font-bold mb-6 text-center  bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text'
           >
             Reset Password
           </h2>
@@ -71,7 +71,7 @@ const ResetPassword = () => {
             {error && <div class="mb-5  flex text-center justify-center  text-sm rounded-lg text-red-400" >
               <span class="font-medium">{error} </span>
             </div>}
-            <button className='w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg'>
+            <button className='w-full p-3 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg'>
               Reset Password
             </button>
           </form>

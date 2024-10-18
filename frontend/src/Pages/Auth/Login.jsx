@@ -41,7 +41,7 @@ const Login = () => {
 
   return (
     <FormBackground>
-      <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text">
+      <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text">
         Login
       </h2>
 
@@ -64,7 +64,7 @@ const Login = () => {
         <div className="flex items-center mb-4">
           <Link
             to={"/forgot-password"}
-            className="bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text hover:underline"
+            className="bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text hover:underline"
           >
             Forgot Password?
           </Link>
@@ -74,14 +74,14 @@ const Login = () => {
             <span className="font-medium">{error}</span>
           </div>
         )}
-        <button className="w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg">
+        <button className="w-full p-3 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg">
           Login
         </button>
       </form>
       <div className="px-8 py-4 bg-opacity-50 flex justify-center">
         <p className="text-mb text-black">
           Don't Have an Account?{" "}
-          <Link to={"/signup"} className="text-purple-500 hover:underline">
+          <Link to={"/signup"} className="text-blue-700 hover:underline">
             SignUp
           </Link>
         </p>

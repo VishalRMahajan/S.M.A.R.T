@@ -17,7 +17,7 @@ const RightPanel = () => {
       <div className="flex flex-col items-center">
         <select
           className="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg 
-          focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 mt-4 shadow"
+          focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 mt-4 shadow"
           onChange={handleExamTypeChange}
         >
           <option value="" disabled>
@@ -59,13 +59,13 @@ const RightPanel = () => {
       <MarksTable />
       <div className="flex flex-row space-x-4 items-center justify-center">
         <button
-          className="p-2 w-36 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg mt-5"
+          className="p-2 w-36 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg mt-5"
           onClick={() => navigate("/")}
         >
           Finish Evaluation
         </button>
         <button
-          className="p-2 w-36 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg mt-5"
+          className="p-2 w-36 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg mt-5"
           onClick={() => navigate("/")}
         >
           Next Sheet

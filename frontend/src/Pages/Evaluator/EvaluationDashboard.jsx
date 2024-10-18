@@ -3,6 +3,7 @@ import LeftPanel from '../../components/Evaluator/LeftPanel'
 import RightPanel from '../../components/Evaluator/RightPanel'
 import { useNavigate } from 'react-router-dom'
 import PDFViewer from '../../components/Evaluator/PDFViewer'
+import logo from '../../assets/SmartLogoDark.png'
 
 
 
@@ -15,12 +16,12 @@ const EvaluationDashboard = () => {
       <header className="bg-white  rounded-3xl m-2 text-white p-4  shadow h-16">
         <div className="flex flex-row justify-between items-center h-full">
           <button
-            className="p-2 w-28 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg"
+            className="p-2 w-28 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg"
             onClick={() => navigate("/")}
           >
             Go Back
           </button>
-          <img src="./SMART.png" alt="logo" className="h-12 items-center" />
+          <img src={logo} alt="logo" className="h-12 items-center" />
           <h1 className="text-xl font-bold text-black">Evaluation Dashboard</h1>
         </div>
       </header>

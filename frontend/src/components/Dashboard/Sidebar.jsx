@@ -20,7 +20,7 @@ const Sidebar = ({ items }) => {
   return (
     <div>
       <aside className="h-screen w-64 flex flex-col justify-between">
-        <nav className="h-full flex flex-col bg-purple-500">
+        <nav className="h-full flex flex-col bg-blue-700">
           <div className="p-4 pb-2 flex justify-center items-center">
             <img src={Logo} alt="Logo" className="w-24 m-3" />
           </div>
@@ -37,7 +37,7 @@ const Sidebar = ({ items }) => {
           <div className="p-4">
             <button
               onClick={handleLogout}
-              className="w-full py-2 px-4 bg-white text-purple-500 rounded-md mb-2"
+              className="w-full py-2 px-4 bg-white text-blue-700 rounded-md mb-2"
             >
               Logout
             </button>
@@ -54,8 +54,8 @@ const SidebarItem = ({ icon, text, to }) => {
       <NavLink
         to={to}
         className={({ isActive }) =>
-          `flex items-center py-2 px-3 my-1 text-white hover:text-purple-500 hover:rounded-r-full font-medium rounded-md cursor-pointer transition-colors ${
-            isActive ? "bg-white text-purple-500" : "hover:bg-white"
+          `flex items-center py-2 px-3 my-1 text-white hover:text-blue-700 hover:rounded-r-full font-medium rounded-md cursor-pointer transition-colors ${
+            isActive ? "bg-white text-blue-700" : "hover:bg-white"
           }`
         }
       >

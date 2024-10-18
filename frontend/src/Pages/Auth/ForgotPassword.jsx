@@ -29,7 +29,7 @@ const ForgotPassword = () => {
   return (
     <FormBackground>
       <h2
-        className='text-3xl font-bold mb-2 text-center  bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text'
+        className='text-3xl font-bold mb-2 text-center  bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text'
       >
         Forgot Password
       </h2>
@@ -47,7 +47,7 @@ const ForgotPassword = () => {
           onChange={(e) => SetEmail(e.target.value)}
         />
 
-        <button className='w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg'>
+        <button className='w-full p-3 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg'>
           Send Reset Link
         </button>
       </form>
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
 
       <div className='px-8 py-4  bg-opacity-50 flex justify-center'>
         <p className='text-mb text-black'>
-          <Link to={"/login"} className='text-purple-500 hover:underline flex justify-center items-center'>
+          <Link to={"/login"} className='text-blue-700 hover:underline flex justify-center items-center'>
             <ArrowLeft className='h-4 w-4 mr-2' />
             Back to Login
           </Link>

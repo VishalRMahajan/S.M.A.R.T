@@ -75,11 +75,11 @@ const EmailVerification = () => {
     return (
         <FormBackground>
             <h2
-                className='text-3xl font-bold mb-6 text-center  bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text'
+                className='text-3xl font-bold mb-6 text-center  bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text'
             >
                 Verify Your Account
             </h2>
-            <p className="text-center bg-gradient-to-l from-purple-500 to-purple-900 text-transparent bg-clip-text mb-6">Enter the 6-digit OTP sent to your email address.</p>
+            <p className="text-center bg-gradient-to-l from-blue-700 to-blue-900 text-transparent bg-clip-text mb-6">Enter the 6-digit OTP sent to your email address.</p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex justify-between">
@@ -93,7 +93,7 @@ const EmailVerification = () => {
                             onChange={(e) => handleChange(index, e.target.value)}
                             onKeyDown={(e) => handleKeyDown(index, e)}
                             className='w-12 h-12 text-center text-2xl font-bold bg-transparent text-black border-2 border-gray-700 rounded-lg
-                                    focus:border-purple-500 focus:outline-none'
+                                    focus:border-blue-700 focus:outline-none'
                         />
                     ))}
                 </div>
@@ -102,7 +102,7 @@ const EmailVerification = () => {
                     <span class="font-medium">{error} </span>
                 </div>}
 
-                <button className='w-full p-3 bg-purple-500 hover:bg-purple-900 text-white font-bold rounded-lg'>
+                <button className='w-full p-3 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-lg'>
                     Submit
                 </button>
             </form>
