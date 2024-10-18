@@ -204,3 +204,18 @@ export const checkRole = async (req,res) =>{
     }
 }
 
+export const checkApprove = async (req,res) =>{
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({email});
+
+        if (!user) {
+            res.status(400).json({ success: false, message: 'User not Found' });
+        }
+
+        return res.status(200).json({ success: true, message: 'User Found', user: { approve: user.approve } });
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}

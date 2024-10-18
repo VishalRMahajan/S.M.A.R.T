@@ -8,17 +8,20 @@ import Login from './Pages/Auth/Login';
 import SignUP from './Pages/Auth/SignUP';
 import EmailVerification from './Pages/Auth/EmailVerification';
 import ForgotPassword from './Pages/Auth/ForgotPassword';
-import Dashboard from './Pages/Dashboard';
+import Dashboard from './Pages/TeacherDashboard/Dashboard';
 import ResetPassword from './Pages/Auth/ResetPassword';
-import AdminDashboard from './Pages/AdminDashboard';
+import AdminDashboard from './Pages/AdminDashboard/AdminDashboard';
 import EvaluationDashboard from './Pages/Evaluator/EvaluationDashboard';
 
+
 const ProtectedRoute = ({children}) =>{
-  const {isAuthenticated,user} = useAuthStore();
+  const {isAuthenticated,user,approve} = useAuthStore();
   
   if (!isAuthenticated){
     return <Navigate to="/login" replace/>
   }
+
+  
 
   if(!user.isVerified){
     return <Navigate to="/verifyemail" replace />
@@ -85,11 +88,11 @@ function App() {
           
 
           //Evaluator Routes
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/evaluationDashboard" element={<EvaluationDashboard/>}/>
 
           //Admin Routes
-          <Route path="/adminDashboard" element={<ProtectedAdminRoute><AdminDashboard/></ProtectedAdminRoute>}/>
+          <Route path="/adminDashboard/*" element={<ProtectedAdminRoute><AdminDashboard/></ProtectedAdminRoute>}/>
         </Routes>
         <Toaster position="top-right" reverseOrder={false}/>
       </div>

@@ -51,7 +51,7 @@ export const useAuthStore = create((set) => ({
         set({ error: null })
         try {
             const response = await axios.post(`${API_URL}/login`, { email, password })
-            set({ user: response.data.user, isAuthenticated: true, error: null })
+            set({ user: response.data.user, isAuthenticated: true, error: null});
         } catch (error) {
             set({ error: error.response.data.message || "Unexpected Login Error" });
             throw error;
@@ -96,6 +96,17 @@ export const useAuthStore = create((set) => ({
             set({ role: response.data.role });
         } catch (error) {
             set({ error: error.response.data.message || "Error checking role" });
+            throw error;
+        }
+    },
+
+    checkApprove: async (email) => {
+        set({ error: null });
+        try {
+            const response = await axios.post(`${API_URL}/check-approve`, { email });
+            return response.data.user.approve;
+        } catch (error) {
+            set({ error: error.response.data.message || "Error checking approval status" });
             throw error;
         }
     }

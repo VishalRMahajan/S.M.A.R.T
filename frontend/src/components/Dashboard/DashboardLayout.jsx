@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/authStore";
 import toast from "react-hot-toast";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 
-const Sidebar = ({ items }) => {
+const DashboardLayout = ({ navbar_items, children }) => {
   const { logout } = useAuthStore();
 
   const handleLogout = async () => {
@@ -17,6 +17,17 @@ const Sidebar = ({ items }) => {
     }
   };
 
+  return (
+    <div className="flex bg-purple-500">
+      <Sidebar items={navbar_items} handleLogout={handleLogout} />
+      <div className="w-full bg-white m-5 rounded-3xl p-5">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const Sidebar = ({ items, handleLogout }) => {
   return (
     <div>
       <aside className="h-screen w-64 flex flex-col justify-between">
@@ -53,9 +64,10 @@ const SidebarItem = ({ icon, text, to }) => {
     <li className="relative">
       <NavLink
         to={to}
+        end
         className={({ isActive }) =>
-          `flex items-center py-2 px-3 my-1 text-white hover:text-purple-500 hover:rounded-r-full font-medium rounded-md cursor-pointer transition-colors ${
-            isActive ? "bg-white text-purple-500" : "hover:bg-white"
+          `flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
+            isActive ? "bg-white text-purple-500 rounded-r-full" : "text-white hover:text-purple-500 hover:bg-white hover:rounded-r-full"
           }`
         }
       >
@@ -66,4 +78,4 @@ const SidebarItem = ({ icon, text, to }) => {
   );
 };
 
-export default Sidebar;
+export default DashboardLayout;
