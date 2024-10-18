@@ -98,7 +98,7 @@ function App() {
       </div>
 
       {/* Message visible only on mobile (small screens) */}
-      <div className="md:hidden flex justify-center items-center h-screen bg-gray-100">
+      <div className="lg:hidden flex justify-center items-center h-screen bg-gray-100">
         <p className="text-center text-lg font-semibold">
           This website is only accessible from a desktop device.
         </p>

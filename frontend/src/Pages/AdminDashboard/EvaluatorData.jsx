@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAdminStore } from "../../store/AdminStore";
 import toast from "react-hot-toast";
+import { FaSearch } from "react-icons/fa";
 
 const EvaluatorData = () => {
   const { evaluators, getEvaluators, error, updateEvaluator } = useAdminStore();
@@ -12,6 +13,8 @@ const EvaluatorData = () => {
     isVerified: false,
     approve: false,
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredEvaluators, setFilteredEvaluators] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +22,23 @@ const EvaluatorData = () => {
         await getEvaluators();
         toast.success("Evaluators fetched successfully");
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching evaluators:", error);
         toast.error("Failed to fetch evaluators");
       }
     };
 
     fetchData();
-  }, []);
+  }, [getEvaluators]);
+
+  useEffect(() => {
+    setFilteredEvaluators(
+      evaluators.filter(
+        (evaluator) =>
+          evaluator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          evaluator.email.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [searchQuery, evaluators]);
 
   const handleUpdate = (evaluator) => {
     setSelectedEvaluator(evaluator);
@@ -54,13 +67,30 @@ const EvaluatorData = () => {
       setIsModalOpen(false);
       await getEvaluators();
     } catch (error) {
+      console.error("Error updating evaluator:", error);
       toast.error("Failed to update evaluator");
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Evaluator Data</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Evaluator Management
+      </h1>
+      <div className="flex justify-around items-center mb-4">
+        <div className="relative w-full max-w-md">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <FaSearch className="text-black" />
+          </div>
+          <input
+            type="text"
+            className="border border-gray-300 rounded px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full pl-10 pr-3 py-2"
+            placeholder="Search Evaluator by Name or Email Address"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 justify-center">
           <thead>
@@ -73,7 +103,7 @@ const EvaluatorData = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {evaluators.map((evaluator) => (
+            {filteredEvaluators.map((evaluator) => (
               <tr key={evaluator._id}>
                 <td className="py-2 px-4 border-b">{evaluator.name}</td>
                 <td className="py-2 px-4 border-b">{evaluator.email}</td>
@@ -86,7 +116,7 @@ const EvaluatorData = () => {
                 <td className="py-2 px-4 border-b">
                   <button
                     onClick={() => handleUpdate(evaluator)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
+                    className="bg-blue-700 hover:bg-blue-500 text-white py-1 px-3 rounded"
                   >
                     Update
                   </button>
@@ -110,6 +140,7 @@ const EvaluatorData = () => {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border rounded"
+                  required
                 />
               </div>
               <div className="mb-4">
@@ -120,6 +151,7 @@ const EvaluatorData = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border rounded"
+                  required
                 />
               </div>
               <div className="mb-4 flex justify-between">
@@ -130,6 +162,7 @@ const EvaluatorData = () => {
                     value={formData.isVerified}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border rounded"
+                    required
                   >
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -142,6 +175,7 @@ const EvaluatorData = () => {
                     value={formData.approve}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border rounded"
+                    required
                   >
                     <option value="true">Yes</option>
                     <option value="false">No</option>

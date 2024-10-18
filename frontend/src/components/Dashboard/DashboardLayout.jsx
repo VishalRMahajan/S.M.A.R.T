@@ -33,7 +33,7 @@ const Sidebar = ({ items, handleLogout }) => {
       <aside className="h-screen w-64 flex flex-col justify-between">
         <nav className="h-full flex flex-col bg-blue-800">
           <div className="p-4 pb-2 flex justify-center items-center">
-            <img src={Logo} alt="Logo" className="w-24 m-3" />
+            <img src={Logo} alt="Logo" className="w-32 m-3 mt-5" />
           </div>
           <ul className="flex-l px-3 flex-grow">
             {items.map((item, index) => (
@@ -48,7 +48,7 @@ const Sidebar = ({ items, handleLogout }) => {
           <div className="p-4">
             <button
               onClick={handleLogout}
-              className="w-full py-2 px-4 bg-white text-blue-700 rounded-md mb-2"
+              className="w-full py-2 px-4 bg-white text-blue-700 font-bold rounded-md mb-4"
             >
               Logout
             </button>
