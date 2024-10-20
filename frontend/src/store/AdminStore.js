@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import axios from "axios";
-import { updateEvaluator } from "../../../backend/controllers/AdminDashboardController";
 
-const API_URL = "http://localhost:5000/api/admin";
+const API_URL = "http://localhost:5000/api";
 
 export const useAdminStore = create((set, get) => ({
   evaluators: [],
   error: null,
+  Data: { Year: [], Departments: [], Semesters: [], Courses: [] },
 
   getEvaluators: async () => {
     set({ error: null });
     try {
-      const response = await axios.get(`${API_URL}/getEvaluator`);
+      const response = await axios.get(`${API_URL}/admin/getEvaluator`);
       set({ evaluators: response.data.data });
     } catch (error) {
       console.log(error);
@@ -23,7 +23,7 @@ export const useAdminStore = create((set, get) => ({
 
   updateEvaluator: async (id, formData) => {
     try {
-      const response = await axios.put(`${API_URL}/updateEvaluator`, {
+      const response = await axios.put(`${API_URL}/admin/updateEvaluator`, {
         id,
         ...formData,
       });
@@ -37,6 +37,109 @@ export const useAdminStore = create((set, get) => ({
       console.log(error);
       set({
         error: error.response?.data?.message || "Error updating evaluator",
+      });
+    }
+  },
+
+  addYear: async (year) => {
+    try {
+      const response = await axios.post(`${API_URL}/academicYear/add`, { year: year });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response?.data?.message || "Error adding year");
+    }
+  },
+
+  addDepartment: async (name, code, academicYear) => {
+    try {
+      const response = await axios.post(`${API_URL}/department/add`, {
+        name: name,
+        code: code,
+        academicYear: academicYear,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response?.data?.error || "Error adding department");
+    }
+  },
+
+  addSemester: async (semester, department, academicYear) => {
+    try {
+      const response = await axios.post(`${API_URL}/semester/add`, {
+        semester: String(semester),
+        department: String(department),
+        academicYear: String(academicYear),
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response?.data?.error || "Error adding semester");
+    }
+  },
+
+  addCourse: async (name, code, semester, department) => {
+    try {
+      console.log(department)
+      const response = await axios.post(`${API_URL}/course/add`, {
+        name: name,
+        code: code,
+        semester: semester,
+        department: department,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response?.data?.error || "Error adding course");
+    }
+  },
+
+  getYear: async () => {
+    try {
+      const yeardata = await axios.get(`${API_URL}/academicYear/get`);
+      set({ Data: { ...get().Data, Year: yeardata.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching Year",
+      });
+    }
+  },
+
+  getDepartment: async () => {
+    try {
+      const departmentdata = await axios.get(`${API_URL}/department/`);
+      set({ Data: { ...get().Data, Departments: departmentdata.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching Department",
+      });
+    }
+  },
+
+  getSemester: async () => {
+    try {
+      const semesterdata = await axios.get(`${API_URL}/semester/`);
+      set({ Data: { ...get().Data, Semesters: semesterdata.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching Semester",
+      });
+    }
+  },
+
+  getCourse: async () => {
+    try {
+      const coursedata = await axios.get(`${API_URL}/course`);
+      console.log(coursedata);
+      set({ Data: { ...get().Data, Courses: coursedata.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching Courses",
       });
     }
   },

@@ -12,6 +12,7 @@ export const createCourse = async (req, res) => {
         .json({ success: false, error: "All fields are required" });
     }
 
+    
     const departmentDoc = await Department.findOne({ code: department });
     if (!departmentDoc) {
       return res
@@ -19,37 +20,36 @@ export const createCourse = async (req, res) => {
         .json({ success: false, error: "Department not found" });
     }
 
-    const semesterDoc = await Semester.findOne({
-      semester,
-      department: departmentDoc._id,
-    });
+   
+    const semesterDoc = await Semester.findOne({ semester, department: departmentDoc._id }).populate("department");
     if (!semesterDoc) {
       return res
         .status(404)
         .json({ success: false, error: "Semester not found" });
     }
 
+   
     const existingCourse = await Course.findOne({
       code,
       semester: semesterDoc._id,
     });
     if (existingCourse) {
-      return res
-        .status(409)
-        .json({
-          success: false,
-          error: "Course code already exists for this semester",
-        });
+      return res.status(409).json({
+        success: false,
+        error: "Course code already exists for this semester",
+      });
     }
 
+   
     const newCourse = new Course({
       name,
       code,
       semester: semesterDoc._id,
-      department: departmentDoc._id,
+      department: semesterDoc.department._id,
     });
     await newCourse.save();
 
+   
     semesterDoc.courses.push(newCourse._id);
     await semesterDoc.save();
 
@@ -62,9 +62,15 @@ export const createCourse = async (req, res) => {
 
 export const getCourse = async (req, res) => {
   try {
-    const courses = await Course.find()
-      .populate("semester", "semester")
-
+    const courses = await Course.find().populate({
+      path: "semester",
+      populate: {
+        path: "department",
+        populate: {
+          path: "academicYear",
+        },
+      },
+    });
     res.status(200).json({ success: true, data: courses });
   } catch (error) {
     console.error("Error fetching courses:", error);

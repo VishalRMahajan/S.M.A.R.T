@@ -1,33 +1,51 @@
 import { Semester } from "../models/Semester.js";
 import { Department } from "../models/Department.js";
-
+import { AcademicYear } from "../models/AcademicYear.js";
 
 export const createSemester = async (req, res) => {
-  const { semester, department } = req.body;
+  const { semester, department, academicYear } = req.body;
 
   try {
-    
-    if (!semester || !department) {
-      return res.status(400).json({ success: false, error: "Semester and department are required" });
+    if (!semester || !department || !academicYear) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: "Semester, department, and academic year are required",
+        });
     }
 
-    
-    const departmentDoc = await Department.findOne({ code: department });
+    const yeardoc = await AcademicYear.findOne({ year: academicYear });
+
+    const departmentDoc = await Department.findOne({
+      code: department,
+      academicYear: yeardoc._id,
+    });
     if (!departmentDoc) {
-      return res.status(404).json({ success: false, error: "Department not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Department not found" });
     }
 
-   
-    const existingSemester = await Semester.findOne({ semester, department: departmentDoc._id });
+    const existingSemester = await Semester.findOne({
+      semester,
+      department: departmentDoc._id,
+    });
     if (existingSemester) {
-      return res.status(409).json({ success: false, error: "Semester already exists for this department" });
+      return res
+        .status(409)
+        .json({
+          success: false,
+          error: "Semester already exists for this department",
+        });
     }
 
-   
-    const newSemester = new Semester({ semester, department: departmentDoc._id });
+    const newSemester = new Semester({
+      semester,
+      department: departmentDoc._id,
+    });
     await newSemester.save();
 
-   
     departmentDoc.semesters.push(newSemester._id);
     await departmentDoc.save();
 
@@ -38,15 +56,17 @@ export const createSemester = async (req, res) => {
   }
 };
 
-
 export const getSemester = async (req, res) => {
   try {
     const semesters = await Semester.find()
       .populate({
-        path: 'department',
-        select: 'name code',
-        populate: { path: 'academicYear', select: 'year' }
-      });
+        path: "department",
+        populate: {
+          path: "academicYear",
+          model: "AcademicYear"
+        }
+      })
+      .populate("courses");
 
     res.status(200).json({ success: true, data: semesters });
   } catch (error) {

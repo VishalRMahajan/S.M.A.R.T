@@ -18,6 +18,9 @@ export const createDepartment = async (req, res) => {
 
         res.status(201).json({ success: true, data: newDepartment });
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ success: false, error: "Department in Academic Year already exists" });
+        }
         res.status(500).json({ success: false, error: error.message });
     }
 };
@@ -25,7 +28,7 @@ export const createDepartment = async (req, res) => {
 // Get the departments
 export const getDepartments = async (req, res) => {
     try {
-        const departments = await Department.find().populate('academicYear');
+        const departments = await Department.find().populate('academicYear').populate('semesters');
         res.status(200).json({ success: true, data: departments });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });

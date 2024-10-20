@@ -1,8 +1,10 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout'; 
-import { FaHome,FaChalkboardTeacher  } from "react-icons/fa";
+import { FaHome,FaChalkboardTeacher   } from "react-icons/fa";
+import { MdAdminPanelSettings } from "react-icons/md";
 import EvaluatorData from './EvaluatorData';
+import AdminPanel from './AdminPanel';
 
 const AdminDashboard = () => {
   const navbar_items = [
@@ -16,6 +18,11 @@ const AdminDashboard = () => {
       text: "Evaluator",
       to: "/adminDashboard/evaluator"
     },
+    {
+      icon: <MdAdminPanelSettings  size={20} />,
+      text: "Admin Panel",
+      to: "/adminDashboard/adminPanel"
+    },
   ];
 
   return (
@@ -23,6 +30,7 @@ const AdminDashboard = () => {
       <Routes>
         <Route path="/" element={<h1 className="text-2xl font-bold">Admin Dashboard</h1>} />
         <Route path="evaluator" element={<EvaluatorData />} />
+        <Route path="adminPanel" element={<AdminPanel />} />
       </Routes>
     </DashboardLayout>
   );
