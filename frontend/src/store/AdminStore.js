@@ -6,7 +6,7 @@ const API_URL = "http://localhost:5000/api";
 export const useAdminStore = create((set, get) => ({
   evaluators: [],
   error: null,
-  Data: { Year: [], Departments: [], Semesters: [], Courses: [] },
+  Data: { Year: [], Departments: [], Semesters: [], Courses: [], Students: [] },
 
   getEvaluators: async () => {
     set({ error: null });
@@ -95,6 +95,37 @@ export const useAdminStore = create((set, get) => ({
     }
   },
 
+  addStudent: async (studentData) => {
+    try {
+      const { name, pidNumber, department, currentSemester, academicYear } = studentData;
+  
+      if (!name || !pidNumber || !department || !currentSemester || !academicYear) {
+        throw new Error("All fields are required");
+      }
+  
+      const response = await axios.post(`${API_URL}/student/add`, {
+        name,
+        pidNumber,
+        department,
+        currentSemester,
+        academicYear,
+      });
+
+      console.log(response)
+  
+      set({
+        Data: { ...get().Data, Students: [...get().Data.Students, response.data.data] },
+      });
+  
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error adding student",
+      });
+    }
+  },
+
+
   getYear: async () => {
     try {
       const yeardata = await axios.get(`${API_URL}/academicYear/get`);
@@ -134,12 +165,28 @@ export const useAdminStore = create((set, get) => ({
   getCourse: async () => {
     try {
       const coursedata = await axios.get(`${API_URL}/course`);
-      console.log(coursedata);
       set({ Data: { ...get().Data, Courses: coursedata.data.data } });
     } catch (error) {
       console.log(error);
       set({
         error: error.response?.data?.message || "Error fetching Courses",
+      });
+    }
+  },
+
+  getStudents: async (academicYear, department, semester) => {
+    try {
+      const params = { academicYear };
+      if (department) params.department = department;
+      if (semester) params.semester = semester;
+
+      const response = await axios.get(`${API_URL}/student/`, { params });
+      console.log(response)
+      set({ Data: { ...get().Data, Students: response.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching students",
       });
     }
   },
