@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useAdminStore } from "../../store/AdminStore";
 import toast from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
+import Select from "react-select";
 
 const EvaluatorData = () => {
-  const { evaluators, getEvaluators, error, updateEvaluator } = useAdminStore();
+  const { evaluators, getEvaluators, error, updateEvaluator, getCourse, Data, allocateCourseToEvaluator } = useAdminStore();
   const [selectedEvaluator, setSelectedEvaluator] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,11 +16,14 @@ const EvaluatorData = () => {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredEvaluators, setFilteredEvaluators] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await getEvaluators();
+        await getCourse();
         toast.success("Evaluators fetched successfully");
       } catch (error) {
         console.error("Error fetching evaluators:", error);
@@ -28,7 +32,7 @@ const EvaluatorData = () => {
     };
 
     fetchData();
-  }, [getEvaluators]);
+  }, [getEvaluators, getCourse]);
 
   useEffect(() => {
     setFilteredEvaluators(
@@ -48,6 +52,10 @@ const EvaluatorData = () => {
       isVerified: evaluator.isVerified,
       approve: evaluator.approve,
     });
+    setSelectedCourses(evaluator.allocatedcourses.map(course => ({
+      value: course._id,
+      label: `${course.code} ${course.name} ${course.semester.department.academicYear.year}`,
+    })));
     setIsModalOpen(true);
   };
 
@@ -57,6 +65,20 @@ const EvaluatorData = () => {
       ...prevData,
       [name]: value === "true" ? true : value === "false" ? false : value,
     }));
+  };
+
+  const handleAllocate = async () => {
+    try {
+      console.log("Selected Evaluator:", selectedEvaluator);
+      console.log("Selected Courses:", selectedCourses);
+      await allocateCourseToEvaluator(selectedEvaluator._id, selectedCourses.map((course) => course.value));
+      toast.success('Courses allocated successfully!');
+      setIsModalOpen(false);
+      await getEvaluators();
+    } catch (error) {
+      console.error("Error allocating courses:", error);
+      toast.error('Error allocating courses. Please try again.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -71,6 +93,11 @@ const EvaluatorData = () => {
       toast.error("Failed to update evaluator");
     }
   };
+
+  const courseOptions = Data.Courses.map((course) => ({
+    value: course._id,
+    label: `${course.code} ${course.name} ${course.semester.department.academicYear.year}`,
+  }));
 
   return (
     <div className="container mx-auto p-4">
@@ -182,6 +209,15 @@ const EvaluatorData = () => {
                   </select>
                 </div>
               </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Allocate Courses</label>
+                <Select
+                  options={courseOptions}
+                  isMulti
+                  value={selectedCourses}
+                  onChange={setSelectedCourses}
+                />
+              </div>
               <div className="flex justify-between">
                 <button
                   type="submit"
@@ -198,6 +234,13 @@ const EvaluatorData = () => {
                 </button>
               </div>
             </form>
+            <button
+              type="button"
+              onClick={handleAllocate}
+              className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mt-4"
+            >
+              Allocate Courses
+            </button>
           </div>
         </div>
       )}

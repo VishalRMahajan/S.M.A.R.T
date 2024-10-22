@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useAdminStore } from "../../store/AdminStore";
 import AddStudentModal from "./AddStudentModal";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const StudentPanel = () => {
   const { Data, getYear, getDepartment, getSemester, getCourse, getStudents } =
@@ -10,13 +12,21 @@ const StudentPanel = () => {
   const [filteredSemesters, setFilteredSemesters] = useState([]);
   const [filters, setFilters] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const studentsPerPage = 5;
   const navigate = useNavigate();
 
   useEffect(() => {
-    getYear();
-    getDepartment();
-    getSemester();
-    getCourse();
+    const fetchData = async () => {
+      setLoading(true);
+      await getYear();
+      await getDepartment();
+      await getSemester();
+      await getCourse();
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -44,13 +54,18 @@ const StudentPanel = () => {
   }, [filters.academicYear, filters.department, Data.Semesters]);
 
   useEffect(() => {
-    if (filters.academicYear && filters.department) {
-      getStudents(filters.academicYear, filters.department, filters.semester);
-    }
+    const fetchStudents = async () => {
+      if (filters.academicYear && filters.department) {
+        setLoading(true);
+        await getStudents(filters.academicYear, filters.department, filters.semester);
+        setLoading(false);
+      }
+    };
+    fetchStudents();
   }, [filters, getStudents]);
 
   const reloadPage = () => {
-    navigate("/")
+    navigate("/");
     navigate("/adminDashboard/student");
   };
 
@@ -72,6 +87,14 @@ const StudentPanel = () => {
     setIsModalOpen(false);
     reloadPage();
   };
+
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = Data.Students.sort((a, b) =>
+    a.pidNumber.localeCompare(b.pidNumber)
+  ).slice(indexOfFirstStudent, indexOfLastStudent);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -143,28 +166,69 @@ const StudentPanel = () => {
               </tr>
             </thead>
             <tbody className="text-center">
-              {Data.Students.map((student) => (
-                <tr key={student._id}>
-                  <td className="py-2 px-4 border-b">{student.name}</td>
-                  <td className="py-2 px-4 border-b">{student.pidNumber}</td>
-                  <td className="py-2 px-4 border-b">
-                    {student.currentSemester?.semester}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {student.department?.code}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {student.department?.academicYear?.year}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {student.currentSemester?.courses
-                      ?.map((course) => course.name)
-                      .join(", ")}
-                  </td>
-                </tr>
-              ))}
+              {loading
+                ? Array.from({ length: studentsPerPage }).map((_, index) => (
+                    <tr key={index}>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <Skeleton />
+                      </td>
+                    </tr>
+                  ))
+                : currentStudents.map((student) => (
+                    <tr key={student._id}>
+                      <td className="py-2 px-4 border-b">{student.name}</td>
+                      <td className="py-2 px-4 border-b">{student.pidNumber}</td>
+                      <td className="py-2 px-4 border-b">
+                        {student.currentSemester?.semester}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {student.department?.code}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {student.department?.academicYear?.year}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {student.currentSemester?.courses
+                          ?.map((course) => course.name)
+                          .join(", ")}
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
+        </div>
+        <div className="flex justify-center mt-4">
+          {Array.from(
+            { length: Math.ceil(Data.Students.length / studentsPerPage) },
+            (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => paginate(index + 1)}
+                className={`py-2 px-4 m-1 rounded ${
+                  currentPage === index + 1
+                    ? "bg-blue-700 text-white"
+                    : "bg-gray-300 text-black"
+                }`}
+              >
+                {index + 1}
+              </button>
+            )
+          )}
         </div>
       </div>
       {isModalOpen && (

@@ -1,6 +1,7 @@
 import { Course } from "../models/Course.js";
 import { Semester } from "../models/Semester.js";
 import { Department } from "../models/Department.js";
+import { User } from "../models/User.js";
 
 export const createCourse = async (req, res) => {
   const { name, code, semester, department } = req.body;
@@ -77,3 +78,5 @@ export const getCourse = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
+
+

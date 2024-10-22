@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     verificationTokenExpiresAt : Date,
     role : { type: String, default: 'evaluator', enum: ['evaluator', 'admin'], required: true },
     approve : { type: Boolean, default: false },
+    allocatedcourses : {type: Array, default: []},
 },{timestamps:true});
 
 export const User = mongoose.model('User', userSchema);

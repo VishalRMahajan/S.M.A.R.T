@@ -20,9 +20,7 @@ const DashboardLayout = ({ navbar_items, children }) => {
   return (
     <div className="flex bg-blue-800">
       <Sidebar items={navbar_items} handleLogout={handleLogout} />
-      <div className="w-full bg-white m-5 rounded-3xl p-5">
-        {children}
-      </div>
+      <div className="w-full bg-white m-5 rounded-3xl p-5">{children}</div>
     </div>
   );
 };
@@ -48,7 +46,7 @@ const Sidebar = ({ items, handleLogout }) => {
           <div className="p-4">
             <button
               onClick={handleLogout}
-              className="w-full py-2 px-4 bg-white text-blue-700 font-bold rounded-md mb-4"
+              className="w-full py-2 px-4 bg-white text-blue-700 font-bold rounded-md mb-4 justify-end"
             >
               Logout
             </button>
@@ -67,11 +65,15 @@ const SidebarItem = ({ icon, text, to }) => {
         end
         className={({ isActive }) =>
           `flex items-center py-2 px-3  mt-2 font-medium rounded-md cursor-pointer transition-colors ${
-            isActive ? "bg-white text-blue-700 rounded-xl shadow-lg" : "text-white hover:text-blue-700 hover:bg-white/80 hover:rounded-xl"
+            isActive
+              ? "bg-white text-blue-700 rounded-xl shadow-lg"
+              : "text-white hover:text-blue-700 hover:bg-white/80 hover:rounded-xl"
           }`
         }
       >
-        <div className="bg-white/20 backdrop-blur-xl p-2 rounded-lg">{icon}</div>
+        <div className="bg-white/20 backdrop-blur-xl p-2 rounded-lg">
+          {icon}
+        </div>
         <span className="w-40 ml-3">{text}</span>
       </NavLink>
     </li>

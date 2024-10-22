@@ -4,6 +4,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5000/api";
 
 export const useAdminStore = create((set, get) => ({
+  evaluatorProfile: null,
   evaluators: [],
   error: null,
   Data: { Year: [], Departments: [], Semesters: [], Courses: [], Students: [] },
@@ -187,6 +188,32 @@ export const useAdminStore = create((set, get) => ({
       console.log(error);
       set({
         error: error.response?.data?.message || "Error fetching students",
+      });
+    }
+  },
+
+  allocateCourseToEvaluator: async (evaluatorId, courseIds) => {
+    try {
+      const response = await axios.post(`${API_URL}/admin/allocatecourse`, {
+        evaluatorId,
+        courseIds,
+      });
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.response?.data?.message || "Error allocating courses");
+    }
+  },
+  getEvaluatorProfile: async () => {
+    set({ error: null });
+    try {
+      const response = await axios.get(`${API_URL}/admin/profile`);
+      set({ evaluatorProfile: response.data.data });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching evaluator profile",
       });
     }
   },
