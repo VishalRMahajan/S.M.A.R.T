@@ -1,12 +1,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout'; 
-import { FaHome,FaChalkboardTeacher   } from "react-icons/fa";
+import { FaHome,FaChalkboardTeacher ,FaUpload   } from "react-icons/fa";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
 import EvaluatorData from './EvaluatorData';
 import AdminPanel from './AdminPanel';
 import StudentPanel from './StudentPanel';
+import AdminUploadPage from './AdminUploadPage';
 
 const AdminDashboard = () => {
   const navbar_items = [
@@ -31,6 +32,11 @@ const AdminDashboard = () => {
       text: "Student",
       to: "/adminDashboard/student"
     },
+    {
+      icon: <FaUpload   size={20} />,
+      text: "Upload",
+      to: "/adminDashboard/upload"
+    },
   ];
 
   return (
@@ -40,6 +46,7 @@ const AdminDashboard = () => {
         <Route path="evaluator" element={<EvaluatorData />} />
         <Route path="adminPanel" element={<AdminPanel />} />
         <Route path="student" element={<StudentPanel />} />
+        <Route path="upload" element={<AdminUploadPage />} />
       </Routes>
     </DashboardLayout>
   );

@@ -10,6 +10,7 @@ import DepartmentRouter from './routes/DepartmentRoutes.js';
 import SemesterRouter from './routes/SemesterController.js';
 import CourseRouter from './routes/CourseRoute.js';
 import StudentRouter from './routes/StudentRoutes.js';
+import PaperRouter from './routes/PaperRoutes.js';
 
 
 import cookieParser from 'cookie-parser';
@@ -29,6 +30,7 @@ app.use("/api/department",DepartmentRouter);
 app.use("/api/semester",SemesterRouter)
 app.use("/api/course",CourseRouter)
 app.use("/api/student",StudentRouter)
+app.use("/api/paper",PaperRouter)
 
 app.listen(PORT, () => {
     connectDB();

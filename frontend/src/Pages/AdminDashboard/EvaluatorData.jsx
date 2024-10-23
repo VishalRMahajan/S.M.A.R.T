@@ -218,6 +218,13 @@ const EvaluatorData = () => {
                   onChange={setSelectedCourses}
                 />
               </div>
+              <button
+              type="button"
+              onClick={handleAllocate}
+              className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mb-4"
+            >
+              Allocate Courses
+            </button>
               <div className="flex justify-between">
                 <button
                   type="submit"
@@ -234,13 +241,7 @@ const EvaluatorData = () => {
                 </button>
               </div>
             </form>
-            <button
-              type="button"
-              onClick={handleAllocate}
-              className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mt-4"
-            >
-              Allocate Courses
-            </button>
+            
           </div>
         </div>
       )}

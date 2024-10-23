@@ -13,7 +13,6 @@ export const createCourse = async (req, res) => {
         .json({ success: false, error: "All fields are required" });
     }
 
-    
     const departmentDoc = await Department.findOne({ code: department });
     if (!departmentDoc) {
       return res
@@ -21,7 +20,6 @@ export const createCourse = async (req, res) => {
         .json({ success: false, error: "Department not found" });
     }
 
-   
     const semesterDoc = await Semester.findOne({ semester, department: departmentDoc._id }).populate("department");
     if (!semesterDoc) {
       return res
@@ -29,7 +27,6 @@ export const createCourse = async (req, res) => {
         .json({ success: false, error: "Semester not found" });
     }
 
-   
     const existingCourse = await Course.findOne({
       code,
       semester: semesterDoc._id,
@@ -41,7 +38,6 @@ export const createCourse = async (req, res) => {
       });
     }
 
-   
     const newCourse = new Course({
       name,
       code,
@@ -50,7 +46,6 @@ export const createCourse = async (req, res) => {
     });
     await newCourse.save();
 
-   
     semesterDoc.courses.push(newCourse._id);
     await semesterDoc.save();
 
@@ -79,4 +74,25 @@ export const getCourse = async (req, res) => {
   }
 };
 
+export const getEvaluatorbycourse = async (req, res) => {
+  const { courseId } = req.params;
 
+  try {
+    const courseDoc = await Course.findById(courseId).populate({
+      path: 'allocated.evaluator',
+      select: 'name email'
+    }).populate({
+      path: 'allocated.students',
+      select: 'name pidNumber'
+    });
+
+    if (!courseDoc) {
+      return res.status(404).json({ success: false, error: "Course not found" });
+    }
+
+    res.status(200).json({ success: true, data: courseDoc.allocated });
+  } catch (error) {
+    console.error("Error fetching evaluators by course:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+};

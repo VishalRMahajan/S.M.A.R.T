@@ -7,7 +7,7 @@ export const useAdminStore = create((set, get) => ({
   evaluatorProfile: null,
   evaluators: [],
   error: null,
-  Data: { Year: [], Departments: [], Semesters: [], Courses: [], Students: [] },
+  Data: { Year: [], Departments: [], Semesters: [], Courses: [], Students: [], EvaluatorsByCourse: [], UploadedPapers: [] },
 
   getEvaluators: async () => {
     set({ error: null });
@@ -126,7 +126,6 @@ export const useAdminStore = create((set, get) => ({
     }
   },
 
-
   getYear: async () => {
     try {
       const yeardata = await axios.get(`${API_URL}/academicYear/get`);
@@ -192,11 +191,36 @@ export const useAdminStore = create((set, get) => ({
     }
   },
 
-  allocateCourseToEvaluator: async (evaluatorId, courseIds) => {
+  getEvaluatorsByCourse: async (courseId) => {
+    try {
+      const response = await axios.get(`${API_URL}/course/evaluator/${courseId}`);
+      console.log(response)
+      set({ Data: { ...get().Data, EvaluatorsByCourse: response.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching evaluators by course",
+      });
+    }
+  },
+
+  getUploadedPapers: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/paper/uploaded`);
+      set({ Data: { ...get().Data, UploadedPapers: response.data.data } });
+    } catch (error) {
+      console.log(error);
+      set({
+        error: error.response?.data?.message || "Error fetching uploaded papers",
+      });
+    }
+  },
+
+  allocateCourseToEvaluator: async (evaluatorId, courseId) => {
     try {
       const response = await axios.post(`${API_URL}/admin/allocatecourse`, {
         evaluatorId,
-        courseIds,
+        courseId,
       });
       console.log(response)
       return response.data;
@@ -209,12 +233,33 @@ export const useAdminStore = create((set, get) => ({
     set({ error: null });
     try {
       const response = await axios.get(`${API_URL}/admin/profile`);
+      console.log(response)
       set({ evaluatorProfile: response.data.data });
     } catch (error) {
       console.log(error);
       set({
         error: error.response?.data?.message || "Error fetching evaluator profile",
       });
+    }
+  },
+
+  uploadPaper: async (formData) => {
+    set({ loading: true, error: null });
+    try {
+      console.log(formData)
+      const response = await axios.post(`${API_URL}/paper/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      set((state) => ({
+        uploadStatus: { ...state.uploadStatus, [formData.get('studentId')]: 'uploaded' },
+        loading: false,
+      }));
+      return response.data;
+    } catch (error) {
+      set({ error: error.response?.data?.message || 'Error uploading paper', loading: false });
+      throw error;
     }
   },
 }));

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAdminStore } from '../store/AdminStore';
+import { useAdminStore } from '../../store/AdminStore';
 
 const Profile = () => {
   const { evaluatorProfile, getEvaluatorProfile, error } = useAdminStore();

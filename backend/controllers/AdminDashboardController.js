@@ -51,17 +51,20 @@ const updateEvaluator = async (req, res) => {
 };
 
 export const allocateCourseToEvaluator = async (req, res) => {
-  const { evaluatorId, courseIds } = req.body;
+  const { evaluatorId, courseId } = req.body;
 
   try {
+   
+
     const evaluator = await User.findById(evaluatorId);
     if (!evaluator) {
+      
       return res
         .status(404)
         .json({ success: false, error: "Evaluator not found" });
     }
 
-    const courses = await Course.find({ _id: { $in: courseIds } }).populate({
+    const course = await Course.findById(courseId).populate({
       path: "semester",
       select: "semester department",
       populate: {
@@ -73,56 +76,69 @@ export const allocateCourseToEvaluator = async (req, res) => {
         },
       },
     });
-    if (courses.length !== courseIds.length) {
+    if (!course) {
+      
       return res
         .status(404)
-        .json({ success: false, error: "Some courses not found" });
+        .json({ success: false, error: "Course not found" });
     }
 
-    courses.forEach((course) => {
-      if (!evaluator.allocatedcourses.some((c) => c._id.equals(course._id))) {
-        evaluator.allocatedcourses.push(course);
-      }
-    });
+  
+    if (!evaluator.allocatedcourses.some((c) => c.equals(course._id))) {
+      evaluator.allocatedcourses.push(course._id);
+    }
+
+    
+    if (!course.allocated.some((a) => a.evaluator.equals(evaluatorId))) {
+      course.allocated.push({ evaluator: evaluatorId, students: [] });
+    }
 
     await evaluator.save();
+    await course.save();
 
-    res.status(200).json({ success: true, data: evaluator });
+    console.log("Successfully allocated course to evaluator:", {
+      evaluator,
+      course,
+    });
+
+    res.status(200).json({ success: true, data: { evaluator, course } });
   } catch (error) {
-    console.error("Error allocating courses to evaluator:", error);
+    console.error("Error allocating course to evaluator:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
 export const getEvaluatorProfile = async (req, res) => {
-    try {
-      const evaluator = await User.findById(req.userId).populate({
-        path: "allocatedcourses",
+  try {
+    const evaluator = await User.findById(req.userId).populate({
+      path: "allocatedcourses",
+      populate: {
+        path: "semester",
+        model: "Semester",
+        select: "semester department",
         populate: {
-          path: "semester",
-          model: "Semester",
-          select: "semester department",
+          path: "department",
+          model: "Department",
+          select: "name academicYear",
           populate: {
-            path: "department",
-            model: "Department",
-            select: "name academicYear",
-            populate: {
-              path: "academicYear",
-              model: "AcademicYear",
-              select: "year",
-            },
+            path: "academicYear",
+            model: "AcademicYear",
+            select: "year",
           },
         },
-      });
-  
-      if (!evaluator) {
-        return res.status(404).json({ success: false, error: "Evaluator not found" });
-      }
-  
-      res.status(200).json({ success: true, data: evaluator });
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+      },
+    });
+
+    if (!evaluator) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Evaluator not found" });
     }
-  };
+
+    res.status(200).json({ success: true, data: evaluator });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 
 export { getEvaluator, updateEvaluator };

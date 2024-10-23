@@ -2,7 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import DashboardLayout from '../../components/Dashboard/DashboardLayout';
 import { LayoutDashboard, User } from "lucide-react";
-import Profile from '../profile';
+import Profile from './Profile';
+import { PiExamFill } from "react-icons/pi";
+import AllocatedPaper from './AllocatedPaper';
 
 const TeacherDashboard = () => {
   const navbar_items = [
@@ -16,6 +18,11 @@ const TeacherDashboard = () => {
       text: "Profile",
       to: "/profile"
     },
+    {
+      icon: <PiExamFill size={20} />,
+      text: "Allocated Paper",
+      to: "/allocatedPaper"
+    },
   ];
 
   return (
@@ -23,6 +30,7 @@ const TeacherDashboard = () => {
       <Routes>
         <Route path="/" element={<h1 className="text-2xl font-bold">Teacher Dashboard</h1>} />
         <Route path="profile" element={<Profile />} />
+        <Route path="allocatedPaper" element={<AllocatedPaper />} />
       </Routes>
     </DashboardLayout>
   );
