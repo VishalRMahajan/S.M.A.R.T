@@ -216,11 +216,12 @@ export const useAdminStore = create((set, get) => ({
     }
   },
 
-  allocateCourseToEvaluator: async (evaluatorId, courseId) => {
+  allocateCourseToEvaluator: async (evaluatorId, courseIds) => {
     try {
+      console.log("Allocating courses:", courseIds, "to evaluator:", evaluatorId);
       const response = await axios.post(`${API_URL}/admin/allocatecourse`, {
         evaluatorId,
-        courseId,
+        courseIds,
       });
       console.log(response)
       return response.data;
@@ -229,11 +230,12 @@ export const useAdminStore = create((set, get) => ({
       throw new Error(error.response?.data?.message || "Error allocating courses");
     }
   },
+
   getEvaluatorProfile: async () => {
     set({ error: null });
     try {
       const response = await axios.get(`${API_URL}/admin/profile`);
-      console.log(response)
+      console.log("Evaluator Profile Response:", response.data.data); // Debug: Check evaluator profile response
       set({ evaluatorProfile: response.data.data });
     } catch (error) {
       console.log(error);

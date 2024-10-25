@@ -12,15 +12,9 @@ import AdminUploadPage from './AdminUploadPage';
 const AdminDashboard = () => {
   const navbar_items = [
     {
-      icon: <FaHome  size={20} />,
-      text: "Home",
-      to: "/adminDashboard"
-    },
-    
-    {
       icon: <MdAdminPanelSettings  size={20} />,
       text: "Admin Panel",
-      to: "/adminDashboard/adminPanel"
+      to: "/adminDashboard/"
     },
     {
       icon: <FaChalkboardTeacher  size={20} />,
@@ -42,9 +36,8 @@ const AdminDashboard = () => {
   return (
     <DashboardLayout navbar_items={navbar_items}>
       <Routes>
-        <Route path="/" element={<h1 className="text-2xl font-bold">Admin Dashboard</h1>} />
         <Route path="evaluator" element={<EvaluatorData />} />
-        <Route path="adminPanel" element={<AdminPanel />} />
+        <Route path="/" element={<AdminPanel />} />
         <Route path="student" element={<StudentPanel />} />
         <Route path="upload" element={<AdminUploadPage />} />
       </Routes>

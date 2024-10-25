@@ -3,6 +3,7 @@ import { useAdminStore } from '../../store/AdminStore';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { toast, Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AllocatedPaper = () => {
   const {
@@ -14,6 +15,7 @@ const AllocatedPaper = () => {
     error,
   } = useAdminStore();
 
+  const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = useState('');
   const [allocatedCourses, setAllocatedCourses] = useState([]);
   const [uploadedPapers, setUploadedPapers] = useState([]);
@@ -49,14 +51,20 @@ const AllocatedPaper = () => {
     const isCourseAllocated = allocatedCourses.some(course => course._id === paper.course._id);
     const isStudentAllocated = allocatedCourses.some(course =>
       course.allocated.some(allocation =>
-        allocation.students.includes(paper.student._id)
+        allocation.students.includes(paper.student._id) && allocation.evaluator === evaluatorProfile._id
       )
     );
     return isCourseAllocated && isStudentAllocated && (selectedCourse === '' || paper.course.name === selectedCourse);
   });
 
+  const handleCheckPaper = (filePath) => {
+    const fileUrl = filePath.replace('D:\\SMART\\backend', 'http://localhost:5000');
+    navigate('/evaluationDashboard', { state: { fileUrl } });
+  };
+
   return (
     <div className="container mx-auto p-4">
+      <Toaster />
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Allocated Papers</h1>
       
       <div className="flex flex-wrap justify-center mb-4">
@@ -116,7 +124,7 @@ const AllocatedPaper = () => {
                       <td className="py-2 px-4 border-b">{paper.course.name}</td>
                       <td className="py-2 px-4 border-b">
                         <button
-                          onClick={() => toast.success(`Checking paper for ${paper.student.name}`)}
+                          onClick={() => handleCheckPaper(paper.filePath)}
                           className="bg-blue-500 text-white px-4 py-2 rounded"
                         >
                           Check Paper

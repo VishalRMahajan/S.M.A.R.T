@@ -2,105 +2,102 @@ import { toast } from "react-hot-toast"; // Import toast
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export const useEvaluatorStore = create(
-  persist((set, get) => ({
-    selectedQuestion: "Q1a",
-    selectedButton: "Q1a",
-    examType: "MSE",
-    
+export const useEvaluatorStore = create((set, get) => ({
+  selectedQuestion: "Q1a",
+  selectedButton: "Q1a",
+  examType: "MSE",
 
-    questions: {
-      Q1a: { marks: 0, maxMarks: 5 },
-      Q1b: { marks: 0, maxMarks: 5 },
-      Q2a: { marks: 0, maxMarks: 5 },
-      Q2b: { marks: 0, maxMarks: 5 },
-      Q3a: { marks: 0, maxMarks: 5 },
-      Q3b: { marks: 0, maxMarks: 5 },
-    },
+  questions: {
+    Q1a: { marks: 0, maxMarks: 5 },
+    Q1b: { marks: 0, maxMarks: 5 },
+    Q2a: { marks: 0, maxMarks: 5 },
+    Q2b: { marks: 0, maxMarks: 5 },
+    Q3a: { marks: 0, maxMarks: 5 },
+    Q3b: { marks: 0, maxMarks: 5 },
+  },
 
-    totalMarks: 0, // Add totalMarks to the state
-    optionalQuestions: [], // Add optionalQuestions to the state
+  totalMarks: 0, // Add totalMarks to the state
+  optionalQuestions: [], // Add optionalQuestions to the state
 
-    setExamType: (type) =>
-      set((state) => ({
-        examType: type,
-        questions:
-          type === "MSE"
-            ? {
-                Q1a: { marks: 0, maxMarks: 5 },
-                Q1b: { marks: 0, maxMarks: 5 },
-                Q2a: { marks: 0, maxMarks: 5 },
-                Q2b: { marks: 0, maxMarks: 5 },
-                Q3a: { marks: 0, maxMarks: 5 },
-                Q3b: { marks: 0, maxMarks: 5 },
-              }
-            : {
-                Q1a: { marks: 0, maxMarks: 10 },
-                Q1b: { marks: 0, maxMarks: 10 },
-                Q2a: { marks: 0, maxMarks: 10 },
-                Q2b: { marks: 0, maxMarks: 10 },
-                Q3a: { marks: 0, maxMarks: 10 },
-                Q3b: { marks: 0, maxMarks: 10 },
-                Q4a: { marks: 0, maxMarks: 10 },
-                Q4b: { marks: 0, maxMarks: 10 },
-                Q5a: { marks: 0, maxMarks: 10 },
-                Q5b: { marks: 0, maxMarks: 10 },
-              },
-        totalMarks: 0, // Reset totalMarks when exam type changes
-        optionalQuestions: [], // Reset optionalQuestions when exam type changes
-      })),
-
-    setSelectedQuestion: (question) =>
-      set(
-        { selectedQuestion: question },
-        console.log("Selected Question updated to", { question })
-      ),
-
-    setSelectedButton: (button) => set({ selectedButton: button }),
-
-    updateMarks: (question, marks) =>
-      set((state) => {
-        console.log(question);
-        const currentMarks = parseFloat(state.questions[question].marks) || 0;
-        const newMarks = parseFloat(marks) || 0;
-        const maxMarks = state.questions[question].maxMarks;
-        console.log(question);
-
-        // Calculate the updated marks for the question
-        const updatedMarks = currentMarks + newMarks;
-
-        if (updatedMarks > maxMarks) {
-          // Display toast notification if the marks exceed the limit
-          toast.error(
-            `Max marks for ${question} is ${maxMarks}. You cannot exceed this limit.`,
-            {
-              position: "bottom-center",
+  setExamType: (type) =>
+    set((state) => ({
+      examType: type,
+      questions:
+        type === "MSE"
+          ? {
+              Q1a: { marks: 0, maxMarks: 5 },
+              Q1b: { marks: 0, maxMarks: 5 },
+              Q2a: { marks: 0, maxMarks: 5 },
+              Q2b: { marks: 0, maxMarks: 5 },
+              Q3a: { marks: 0, maxMarks: 5 },
+              Q3b: { marks: 0, maxMarks: 5 },
             }
-          );
-          return state; // Do not update marks
-        }
+          : {
+              Q1a: { marks: 0, maxMarks: 10 },
+              Q1b: { marks: 0, maxMarks: 10 },
+              Q2a: { marks: 0, maxMarks: 10 },
+              Q2b: { marks: 0, maxMarks: 10 },
+              Q3a: { marks: 0, maxMarks: 10 },
+              Q3b: { marks: 0, maxMarks: 10 },
+              Q4a: { marks: 0, maxMarks: 10 },
+              Q4b: { marks: 0, maxMarks: 10 },
+              Q5a: { marks: 0, maxMarks: 10 },
+              Q5b: { marks: 0, maxMarks: 10 },
+            },
+      totalMarks: 0, // Reset totalMarks when exam type changes
+      optionalQuestions: [], // Reset optionalQuestions when exam type changes
+    })),
 
-        // Update the marks if within limits
-        const updatedQuestions = {
-          ...state.questions,
-          [question]: { marks: updatedMarks, maxMarks },
-        };
+  setSelectedQuestion: (question) =>
+    set(
+      { selectedQuestion: question },
+      console.log("Selected Question updated to", { question })
+    ),
 
-        // Calculate the total marks based on the exam type
-        const { totalMarks, optionalQuestions } = calculateTotalMarks(
-          updatedQuestions,
-          state.examType
+  setSelectedButton: (button) => set({ selectedButton: button }),
+
+  updateMarks: (question, marks) =>
+    set((state) => {
+      console.log(question);
+      const currentMarks = parseFloat(state.questions[question].marks) || 0;
+      const newMarks = parseFloat(marks) || 0;
+      const maxMarks = state.questions[question].maxMarks;
+      console.log(question);
+
+      // Calculate the updated marks for the question
+      const updatedMarks = currentMarks + newMarks;
+
+      if (updatedMarks > maxMarks) {
+        // Display toast notification if the marks exceed the limit
+        toast.error(
+          `Max marks for ${question} is ${maxMarks}. You cannot exceed this limit.`,
+          {
+            position: "bottom-center",
+          }
         );
+        return state; // Do not update marks
+      }
 
-        return {
-          ...state,
-          questions: updatedQuestions,
-          totalMarks,
-          optionalQuestions,
-        };
-      }),
-  }))
-);
+      // Update the marks if within limits
+      const updatedQuestions = {
+        ...state.questions,
+        [question]: { marks: updatedMarks, maxMarks },
+      };
+
+      // Calculate the total marks based on the exam type
+      const { totalMarks, optionalQuestions } = calculateTotalMarks(
+        updatedQuestions,
+        state.examType
+      );
+
+      return {
+        ...state,
+        questions: updatedQuestions,
+        totalMarks,
+        optionalQuestions,
+      };
+    }),
+}));
 
 // Helper function to calculate total marks based on exam type
 const calculateTotalMarks = (questions, examType) => {
