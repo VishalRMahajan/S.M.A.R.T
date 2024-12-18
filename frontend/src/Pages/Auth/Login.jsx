@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FormBackground from "../../components/FormBackground";
 import Input from "../../components/Input";
 import { Mail, Lock } from "lucide-react";
@@ -11,21 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const { login, error, checkApprove } = useAuthStore();
-
-  const checkapprove = async (e) => {
-    e.preventDefault();
-    try {
-      const isApproved = await checkApprove(email);
-      if (isApproved) {
-        handleLogin(e);
-      } else {
-        toast.error("Please wait for Admin approval");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { login, error } = useAuthStore();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,7 +21,7 @@ const Login = () => {
       toast.success("Login Successful");
     } catch (error) {
       console.log(error);
-      toast.error("Login failed. Please try again.");
+      toast.error("Please check your credentials or Wait for Admin Approval");
     }
   };
 
@@ -45,7 +31,7 @@ const Login = () => {
         Login
       </h2>
 
-      <form onSubmit={checkapprove}>
+      <form onSubmit={handleLogin}>
         <Input
           icon={Mail}
           type="email"
@@ -80,7 +66,7 @@ const Login = () => {
       </form>
       <div className="px-8 py-4 bg-opacity-50 flex justify-center">
         <p className="text-mb text-black">
-          Don't Have an Account?{" "}
+          Dont Have an Account?{" "}
           <Link to={"/signup"} className="text-blue-700 hover:underline">
             SignUp
           </Link>

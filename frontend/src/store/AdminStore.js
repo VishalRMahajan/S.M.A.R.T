@@ -1,13 +1,21 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:3000/api";
 
 export const useAdminStore = create((set, get) => ({
   evaluatorProfile: null,
   evaluators: [],
   error: null,
-  Data: { Year: [], Departments: [], Semesters: [], Courses: [], Students: [], EvaluatorsByCourse: [], UploadedPapers: [] },
+  Data: {
+    Year: [],
+    Departments: [],
+    Semesters: [],
+    Courses: [],
+    Students: [],
+    EvaluatorsByCourse: [],
+    UploadedPapers: [],
+  },
 
   getEvaluators: async () => {
     set({ error: null });
@@ -44,7 +52,9 @@ export const useAdminStore = create((set, get) => ({
 
   addYear: async (year) => {
     try {
-      const response = await axios.post(`${API_URL}/academicYear/add`, { year: year });
+      const response = await axios.post(`${API_URL}/academicYear/add`, {
+        year: year,
+      });
       return response.data;
     } catch (error) {
       console.log(error);
@@ -82,7 +92,7 @@ export const useAdminStore = create((set, get) => ({
 
   addCourse: async (name, code, semester, department) => {
     try {
-      console.log(department)
+      console.log(department);
       const response = await axios.post(`${API_URL}/course/add`, {
         name: name,
         code: code,
@@ -98,12 +108,19 @@ export const useAdminStore = create((set, get) => ({
 
   addStudent: async (studentData) => {
     try {
-      const { name, pidNumber, department, currentSemester, academicYear } = studentData;
-  
-      if (!name || !pidNumber || !department || !currentSemester || !academicYear) {
+      const { name, pidNumber, department, currentSemester, academicYear } =
+        studentData;
+
+      if (
+        !name ||
+        !pidNumber ||
+        !department ||
+        !currentSemester ||
+        !academicYear
+      ) {
         throw new Error("All fields are required");
       }
-  
+
       const response = await axios.post(`${API_URL}/student/add`, {
         name,
         pidNumber,
@@ -112,12 +129,14 @@ export const useAdminStore = create((set, get) => ({
         academicYear,
       });
 
-      console.log(response)
-  
+      console.log(response);
+
       set({
-        Data: { ...get().Data, Students: [...get().Data.Students, response.data.data] },
+        Data: {
+          ...get().Data,
+          Students: [...get().Data.Students, response.data.data],
+        },
       });
-  
     } catch (error) {
       console.log(error);
       set({
@@ -181,7 +200,7 @@ export const useAdminStore = create((set, get) => ({
       if (semester) params.semester = semester;
 
       const response = await axios.get(`${API_URL}/student/`, { params });
-      console.log(response)
+      console.log(response);
       set({ Data: { ...get().Data, Students: response.data.data } });
     } catch (error) {
       console.log(error);
@@ -193,13 +212,17 @@ export const useAdminStore = create((set, get) => ({
 
   getEvaluatorsByCourse: async (courseId) => {
     try {
-      const response = await axios.get(`${API_URL}/course/evaluator/${courseId}`);
-      console.log(response)
+      const response = await axios.get(
+        `${API_URL}/course/evaluator/${courseId}`
+      );
+      console.log(response);
       set({ Data: { ...get().Data, EvaluatorsByCourse: response.data.data } });
     } catch (error) {
       console.log(error);
       set({
-        error: error.response?.data?.message || "Error fetching evaluators by course",
+        error:
+          error.response?.data?.message ||
+          "Error fetching evaluators by course",
       });
     }
   },
@@ -211,23 +234,31 @@ export const useAdminStore = create((set, get) => ({
     } catch (error) {
       console.log(error);
       set({
-        error: error.response?.data?.message || "Error fetching uploaded papers",
+        error:
+          error.response?.data?.message || "Error fetching uploaded papers",
       });
     }
   },
 
   allocateCourseToEvaluator: async (evaluatorId, courseIds) => {
     try {
-      console.log("Allocating courses:", courseIds, "to evaluator:", evaluatorId);
+      console.log(
+        "Allocating courses:",
+        courseIds,
+        "to evaluator:",
+        evaluatorId
+      );
       const response = await axios.post(`${API_URL}/admin/allocatecourse`, {
         evaluatorId,
         courseIds,
       });
-      console.log(response)
+      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);
-      throw new Error(error.response?.data?.message || "Error allocating courses");
+      throw new Error(
+        error.response?.data?.message || "Error allocating courses"
+      );
     }
   },
 
@@ -240,7 +271,8 @@ export const useAdminStore = create((set, get) => ({
     } catch (error) {
       console.log(error);
       set({
-        error: error.response?.data?.message || "Error fetching evaluator profile",
+        error:
+          error.response?.data?.message || "Error fetching evaluator profile",
       });
     }
   },
@@ -248,19 +280,25 @@ export const useAdminStore = create((set, get) => ({
   uploadPaper: async (formData) => {
     set({ loading: true, error: null });
     try {
-      console.log(formData)
+      console.log(formData);
       const response = await axios.post(`${API_URL}/paper/upload`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       set((state) => ({
-        uploadStatus: { ...state.uploadStatus, [formData.get('studentId')]: 'uploaded' },
+        uploadStatus: {
+          ...state.uploadStatus,
+          [formData.get("studentId")]: "uploaded",
+        },
         loading: false,
       }));
       return response.data;
     } catch (error) {
-      set({ error: error.response?.data?.message || 'Error uploading paper', loading: false });
+      set({
+        error: error.response?.data?.message || "Error uploading paper",
+        loading: false,
+      });
       throw error;
     }
   },

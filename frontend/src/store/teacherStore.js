@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import axios from 'axios';
+import { create } from "zustand";
+import axios from "axios";
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = "http://localhost:3000/api";
 
 export const useTeacherStore = create((set) => ({
   Data: {
@@ -19,7 +19,11 @@ export const useTeacherStore = create((set) => ({
         loading: false,
       }));
     } catch (error) {
-      set({ error: error.response?.data?.message || 'Error fetching allocated papers', loading: false });
+      set({
+        error:
+          error.response?.data?.message || "Error fetching allocated papers",
+        loading: false,
+      });
     }
   },
 }));
